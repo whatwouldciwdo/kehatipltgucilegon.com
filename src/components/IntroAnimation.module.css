@@ -1,0 +1,142 @@
+.stage {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100svh;
+  z-index: 9999;
+  overflow: hidden;
+  isolation: isolate;
+  background: #ffffff;
+}
+
+.initialSequence {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  z-index: 30; /* Above veil */
+}
+
+.logo {
+  height: 80px; /* Adjust as needed */
+  width: auto;
+  object-fit: contain;
+}
+
+.initialText {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: #fff; /* White text on black veil */
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #000;
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  will-change: clip-path;
+}
+
+.strip {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  transform: translateY(-50%);
+  padding: 0 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 10vw;
+  will-change: gap;
+}
+
+.tile {
+  width: 15vw;
+  aspect-ratio: 5 / 7;
+  will-change: opacity, transform, clip-path;
+  overflow: hidden;
+  margin: 0;
+}
+
+.tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.titleContainer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  white-space: nowrap;
+}
+
+.titleH1 {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 10vw; /* Reduced from 15vw to fit PLTGU CILEGON better */
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: -0.05em;
+  text-align: center;
+  text-transform: uppercase;
+  margin: 0;
+  color: #fff; /* White text on dark veil, but wait, veil lifts! If veil lifts to white background, text needs to be dark, or veil reveals something else? Let's check original. */
+}
+
+/* Wait, original veil is black. Background is white. Title reveals before veil lifts? 
+Let's check the timeline:
+// 7. Dark veil lifts at 4.5s
+// 8. Title reveal at 4.0s
+Title reveals while veil is still down! So title is on top of black veil.
+Then veil lifts. If title is white, it will disappear against white background?
+Actually, in the original, the feature image scales to full screen.
+// 6. Feature image scales up at 3.5s (scale: 2)
+// 7. Dark veil lifts at 4.5s
+Wait, if feature image is behind the veil, and veil lifts, the feature image is revealed!
+So the background becomes the feature image, not white.
+Let's keep color white for now.
+*/
+
+.wordMask {
+  display: inline-block;
+  overflow: hidden;
+  line-height: 1;
+  vertical-align: top;
+}
+
+.word {
+  display: inline-block;
+  will-change: transform;
+}
+
+.wordSpace {
+  display: inline-block;
+  width: 0.32em;
+}
+
+@media (max-width: 1000px) {
+  .strip {
+     padding: 0 0.5rem;
+     gap: 2.5vw;
+  }
+  .tile {
+     width: 20vw;
+  }
+  .titleH1 {
+     font-size: 15vw;
+  }
+}

@@ -53,7 +53,7 @@ export default function KehatiInitiatives() {
           <div className="badge-eco" style={{ backgroundColor: 'rgba(18, 44, 30, 0.06)' }}>Keanekaragaman Hayati</div>
           <h2 
             style={{
-              fontSize: '2.8rem',
+              fontSize: 'clamp(1.8rem, 6.5vw, 2.8rem)',
               color: 'var(--bg-dark-green)',
               letterSpacing: '-0.03em',
             }}

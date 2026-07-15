@@ -1,235 +1,322 @@
 'use client';
 
 import React from 'react';
-import { Leaf } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
     <footer className="footer-green">
-      <div className="container">
-        {/* Upper Footer: Branding Message & Nav Links */}
-        <div 
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-            gap: '3rem',
-            marginBottom: '2rem'
-          }}
-          className="footer-grid-upper"
-        >
-          {/* Large Typographic Catchphrase */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            <h2 
-              style={{
-                fontSize: 'clamp(3.5rem, 6.5vw, 5.5rem)',
-                fontWeight: 800,
-                color: 'var(--text-light)',
-                letterSpacing: '-0.04em',
-                lineHeight: '0.9',
-              }}
-            >
-              Stay green.
-            </h2>
-            <p style={{ color: 'var(--text-light-muted)', fontSize: '1.05rem', maxWidth: '400px', lineHeight: '1.5' }}>
-              Membangkitkan energi listrik berkualitas tinggi dengan komitmen penuh menjaga kelestarian lingkungan dan keanekaragaman hayati demi generasi masa depan.
-            </p>
-          </div>
-
-          {/* Links Section Grid */}
-          <div 
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: '2.5rem',
-            }}
-            className="footer-links-container"
-          >
-            {/* Column 1: Main Pages */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <a href="#" className="footer-link-primary">Tentang UBP Cilegon</a>
-              <a href="#proper" className="footer-link-primary">Kinerja PROPER</a>
-              <a href="#kehati" className="footer-link-primary">Keanekaragaman Hayati</a>
-              <a href="#" className="footer-link-primary">Dokumentasi Kegiatan</a>
-              <a href="#" className="footer-link-primary">Kebijakan Mutu & K3L</a>
-              <a href="#" className="footer-link-primary">Pusat Informasi</a>
+      <div className="container" style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 2rem' }}>
+        {/* Upper Footer: 4 Columns Layout */}
+        <div className="footer-grid-upper">
+          {/* Column 1: Brand Logo, Address, Contact, Socials */}
+          <div className="footer-brand-col">
+            <div className="footer-logo">
+              <img src="/images/logo-pln.png" alt="PLN Logo" className="footer-logo-img" />
+              <div className="footer-logo-text">
+                <span className="logo-title">PLN</span>
+                <span className="logo-subtitle">INDONESIA POWER</span>
+                <span className="logo-sub-subtitle">UBP CILEGON</span>
+              </div>
             </div>
-
-            {/* Column 2: Secondary / Actions */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <a href="#" className="footer-link-secondary">Karir</a>
-              <a href="#kontak" className="footer-link-secondary">Hubungi Kami</a>
-              <a href="#" className="footer-link-secondary">Laporan Kinerja Lingkungan</a>
-              <a href="#" className="footer-link-secondary">Pengaduan Masyarakat (WBS)</a>
-            </div>
-          </div>
-        </div>
-
-        {/* Divider line */}
-        <div className="footer-divider" />
-
-        {/* Lower Footer: Logo, Address, Policies, Socials, Copyright */}
-        <div 
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr',
-            gap: '2.5rem',
-            alignItems: 'flex-start',
-            marginTop: '1.5rem',
-          }}
-          className="footer-grid-lower"
-        >
-          {/* Logo & Corporate Tag */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <div 
-              style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '10px',
-                backgroundColor: 'rgba(250, 250, 250, 0.1)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--accent-lime)',
-              }}
-            >
-              <Leaf size={18} strokeWidth={2.5} />
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-              <span style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--text-light)' }}>PLN INDONESIA POWER</span>
-              <span style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--text-light-muted)', letterSpacing: '0.05em' }}>UBP CILEGON</span>
-            </div>
-          </div>
-
-          {/* Company Office Address */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-            <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-light)', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-              Kantor Operasional
-            </span>
-            <p style={{ color: 'var(--text-light-muted)', fontSize: '0.875rem', lineHeight: '1.5', maxWidth: '350px' }}>
+            
+            <p className="footer-address">
               PT PLN Indonesia Power UBP Cilegon<br />
               Jl. Raya Merak KM. 119, Suralaya, Pulomerak,<br />
               Kota Cilegon, Banten 42438, Indonesia.
             </p>
+            
+            <div className="footer-contact">
+              <span>Tel: +62 254 5750077</span>
+              <span>Email: info@plnindonesiapower.co.id</span>
+            </div>
+            
+            <div className="footer-socials">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">f</a>
+              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">ig</a>
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon">in</a>
+              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-icon">yt</a>
+            </div>
           </div>
 
-          {/* Legal / Policy links */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.85rem' }}>
-            <a href="#" className="footer-policy-link">Kebijakan Privasi</a>
-            <a href="#" className="footer-policy-link">Syarat & Ketentuan</a>
-            <a href="#" className="footer-policy-link">Kepatuhan Regulasi</a>
-            <a href="#" className="footer-policy-link">Sertifikasi ISO 14001</a>
+          {/* Column 2: PROPER Sublinks */}
+          <div className="footer-nav-col">
+            <h3>PROPER KLHK</h3>
+            <a href="#proper">Laporan PROPER</a>
+            <a href="#proper">Reduksi Emisi</a>
+            <a href="#proper">Efisiensi Energi</a>
+            <a href="#proper">Standard Hijau</a>
+          </div>
+
+          {/* Column 3: Kehati Sublinks */}
+          <div className="footer-nav-col">
+            <h3>Keanekaragaman Hayati</h3>
+            <a href="#kehati">Restorasi Mangrove</a>
+            <a href="#kehati">Taman Kehati</a>
+            <a href="#kehati">Konservasi Flora</a>
+            <a href="#kehati">Pemberdayaan</a>
+          </div>
+
+          {/* Column 4: Tentang Kami Sublinks */}
+          <div className="footer-nav-col">
+            <h3>Tentang Kami</h3>
+            <a href="#tentang">Visi & Misi</a>
+            <a href="#tentang">Profil UBP</a>
+            <a href="#tentang">Hubungi Kami</a>
+            <a href="#">Karir</a>
           </div>
         </div>
 
-        {/* Bottom Bar: Social Icons & Copyright */}
-        <div 
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            gap: '1.5rem',
-            marginTop: '3.5rem',
-            borderTop: '1px solid rgba(250, 250, 250, 0.05)',
-            paddingTop: '2rem',
-          }}
-          className="footer-bottom-bar"
-        >
-          {/* Social Icons (custom SVG matching Lucide stroke style) */}
-          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-youtube">
-                <path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17z"/>
-                <polygon points="10 15 15 12 10 9"/>
-              </svg>
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-twitter">
-                <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
-              </svg>
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-instagram">
-                <rect width="20" height="20" x="2" y="2" rx="5" ry="5"/>
-                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                <line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>
-              </svg>
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-linkedin">
-                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                <rect width="4" height="12" x="2" y="9"/>
-                <circle cx="4" cy="4" r="2"/>
-              </svg>
-            </a>
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">
-              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-facebook">
-                <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
-              </svg>
-            </a>
+        {/* Horizontal Divider Line */}
+        <div className="footer-divider" />
+
+        {/* Lower Footer: Badges & Policy Links */}
+        <div className="footer-lower-row">
+          {/* Left: Badges */}
+          <div className="footer-badges">
+            <div className="badge-pill">PROPER EMAS</div>
+            <div className="badge-pill">ISO 14001</div>
+            <div className="badge-pill">ISO 9001</div>
           </div>
 
-          {/* Copyright text */}
-          <div style={{ fontSize: '0.85rem', color: 'var(--text-light-muted)', textAlign: 'center' }}>
-            © {currentYear} PT PLN Indonesia Power UBP Cilegon. All rights reserved.
+          {/* Right: Policy Horizontal Links */}
+          <div className="footer-policy-links">
+            <a href="#">Kebijakan Privasi</a>
+            <a href="#">Syarat & Ketentuan</a>
+            <a href="#">Sitemap</a>
+            <a href="#">WBS</a>
           </div>
+        </div>
+
+        {/* Bottom copyright line */}
+        <div className="footer-copyright">
+          © {currentYear} Sistem Informasi dan PROPER PLN Indonesia Power UBP Cilegon. All Rights Reserved.
         </div>
       </div>
 
       <style jsx>{`
-        .footer-link-primary {
-          font-size: 1.6rem;
-          font-weight: 700;
+        .footer-green {
+          background-color: var(--bg-dark-green);
           color: var(--text-light);
-          letter-spacing: -0.02em;
-          transition: var(--transition-fast);
-        }
-        .footer-link-primary:hover {
-          color: var(--accent-lime);
-          transform: translateX(4px);
-        }
-        
-        .footer-link-secondary {
-          font-size: 1.05rem;
-          font-weight: 600;
-          color: var(--text-light-muted);
-          transition: var(--transition-fast);
-        }
-        .footer-link-secondary:hover {
-          color: var(--text-light);
+          padding: 5rem 0 3rem 0;
+          position: relative;
+          overflow: hidden;
+          border-radius: 40px 40px 0 0;
+          margin: 0 70px;
+          font-family: var(--font-outfit), system-ui, sans-serif;
         }
 
-        .footer-policy-link {
-          color: var(--text-light-muted);
-          transition: var(--transition-fast);
+        .footer-grid-upper {
+          display: grid;
+          grid-template-columns: 1.5fr 1fr 1fr 1fr;
+          gap: 3rem;
+          margin-bottom: 3rem;
         }
-        .footer-policy-link:hover {
-          color: var(--text-light);
+
+        .footer-brand-col {
+          display: flex;
+          flex-direction: column;
+          gap: 1.2rem;
+        }
+
+        .footer-logo {
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+        }
+
+        .footer-logo-img {
+          height: 36px;
+          width: auto;
+          object-fit: contain;
+        }
+
+        .footer-logo-text {
+          display: flex;
+          flex-direction: column;
+          line-height: 1.1;
+        }
+
+        .logo-title {
+          font-size: 1.1rem;
+          font-weight: 800;
+          color: #23aae1;
+          letter-spacing: 0.15em;
+        }
+
+        .logo-subtitle {
+          font-size: 0.7rem;
+          font-weight: 500;
+          color: #ffffff;
+          letter-spacing: 0.08em;
+          margin-top: -2px;
+        }
+
+        .logo-sub-subtitle {
+          font-size: 0.6rem;
+          font-weight: 500;
+          color: var(--text-light-muted);
+          letter-spacing: 0.05em;
+          margin-top: 1px;
+        }
+
+        .footer-address {
+          color: var(--text-light-muted);
+          font-size: 0.85rem;
+          line-height: 1.5;
+          margin: 0;
+        }
+
+        .footer-contact {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+          font-size: 0.85rem;
+          color: var(--text-light-muted);
+        }
+
+        .footer-socials {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          margin-top: 0.5rem;
         }
 
         .social-icon {
-          color: var(--text-light-muted);
-          transition: var(--transition-fast);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background-color: #e9d5ff; /* light lavender */
+          color: #1e3f35; /* dark green */
+          font-weight: bold;
+          text-decoration: none;
+          font-size: 0.9rem;
+          transition: all 0.2s ease;
         }
+
         .social-icon:hover {
-          color: var(--text-light);
+          background-color: #f3e8ff;
           transform: translateY(-2px);
         }
 
-        @media (min-width: 768px) {
+        .footer-nav-col {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+        }
+
+        .footer-nav-col h3 {
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #ffffff;
+          margin: 0 0 0.5rem 0;
+          letter-spacing: -0.01em;
+        }
+
+        .footer-nav-col a {
+          color: var(--text-light-muted);
+          text-decoration: none;
+          font-size: 0.95rem;
+          transition: color 0.2s ease, transform 0.2s ease;
+        }
+
+        .footer-nav-col a:hover {
+          color: #ffffff;
+          transform: translateX(2px);
+        }
+
+        .footer-divider {
+          border-top: 1px solid rgba(250, 250, 250, 0.08);
+          margin: 2.5rem 0;
+        }
+
+        .footer-lower-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 2rem;
+          margin-bottom: 2.5rem;
+        }
+
+        .footer-badges {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+        }
+
+        .badge-pill {
+          padding: 0.4rem 1rem;
+          border-radius: 30px;
+          border: 1px solid rgba(250, 250, 250, 0.15);
+          font-size: 0.75rem;
+          font-weight: 600;
+          color: #ffffff;
+          letter-spacing: 0.05em;
+          background-color: rgba(250, 250, 250, 0.03);
+        }
+
+        .footer-policy-links {
+          display: flex;
+          gap: 2rem;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+
+        .footer-policy-links a {
+          color: var(--text-light-muted);
+          text-decoration: none;
+          font-size: 0.85rem;
+          transition: color 0.2s ease;
+        }
+
+        .footer-policy-links a:hover {
+          color: #ffffff;
+        }
+
+        .footer-copyright {
+          font-size: 0.85rem;
+          color: var(--text-light-muted);
+          text-align: left;
+          border-top: 1px solid rgba(250, 250, 250, 0.05);
+          padding-top: 1.5rem;
+        }
+
+        @media (max-width: 992px) {
+          .footer-green {
+            margin: 0 20px;
+            border-radius: 32px 32px 0 0;
+            padding: 4rem 0 2rem 0;
+          }
           .footer-grid-upper {
-            grid-template-columns: 1.3fr 1fr !important;
-            gap: 4rem !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
           }
-          .footer-grid-lower {
-            grid-template-columns: 1fr 1fr 1fr !important;
-            gap: 2rem !important;
+        }
+
+        @media (max-width: 768px) {
+          .footer-grid-upper {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
           }
-          .footer-bottom-bar {
-            flex-direction: row !important;
-            gap: 0 !important;
+          .footer-lower-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.5rem;
+          }
+          .footer-policy-links {
+            gap: 1rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .footer-green {
+            margin: 0 12px;
+            border-radius: 24px 24px 0 0;
           }
         }
       `}</style>
