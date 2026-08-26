@@ -62,8 +62,8 @@
 }
 
 .tile {
-  width: 15vw;
-  aspect-ratio: 5 / 7;
+  width: 26vw;
+  aspect-ratio: 2 / 1;
   will-change: opacity, transform, clip-path;
   overflow: hidden;
   margin: 0;
@@ -134,7 +134,7 @@ Let's keep color white for now.
      gap: 2.5vw;
   }
   .tile {
-     width: 20vw;
+     width: 30vw;
   }
   .titleH1 {
      font-size: 15vw;

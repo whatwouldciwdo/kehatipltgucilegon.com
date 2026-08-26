@@ -2,8 +2,16 @@
 
 import React from 'react';
 import Header from '@/components/Header';
+import HeroAbstractBackground from '@/components/HeroAbstractBackground';
+import HeroContentOverlay from '@/components/HeroContentOverlay';
+import CommunityEditorialSection from '@/components/CommunityEditorialSection';
 
 import KehatiInitiatives from '@/components/KehatiInitiatives';
+import VideoShowcaseSection from '@/components/VideoShowcaseSection';
+import CollegeLifeShowcase from '@/components/CollegeLifeShowcase';
+import WelcomeStatementSection from '@/components/WelcomeStatementSection';
+import CilegonLocationSection from '@/components/CilegonLocationSection';
+import ReportBanner from '@/components/ReportBanner';
 import Footer from '@/components/Footer';
 import IntroAnimation from '@/components/IntroAnimation';
 
@@ -13,22 +21,16 @@ export default function Home() {
       {/* Header Navigation */}
       <Header />
 
-      <main style={{ width: '100%', overflowX: 'hidden' }}>
+      <main style={{ width: '100%', overflowX: 'clip' }}>
         <IntroAnimation />
         
         {/* Section 1: Hero */}
         <section className="hero" style={{ minHeight: '100vh', position: 'relative' }}>
-          {/* Background image matching the preloader center image */}
-          <div 
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(/img/3.jpg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              zIndex: 1,
-            }}
-          />
+          {/* Layered Geometric Div Background */}
+          <HeroAbstractBackground />
+          
+          {/* Typography & Editorial Layout Overlay */}
+          <HeroContentOverlay />
         </section>
 
         {/* Section 1.5: Metrics Section (Clean, separate section below the hero fold) */}
@@ -51,8 +53,20 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Section 1.8: Community Editorial Section (Asymmetric 2-Column Photo & Narrative Layout) */}
+        <CommunityEditorialSection />
+
+        {/* Section 2: Welcome Statement Section (Multi-tone dark statement with scroll lock) */}
+        <WelcomeStatementSection />
+
+        {/* Section 2.5: Cilegon Geographic & Strategic Location Section */}
+        <CilegonLocationSection />
+
         {/* Section 3: Kehati Conservation initiatives */}
         <KehatiInitiatives />
+
+        {/* Section 3.5: College Life Circular Showcase */}
+        <CollegeLifeShowcase />
 
         {/* Section 4: About UBP Cilegon (Environmental Policy) */}
         <section 
@@ -114,6 +128,12 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Section 4.5: Fullwidth Video Showcase with Rotating Badge & Marquee */}
+        <VideoShowcaseSection />
+
+        {/* Section 5: Featured Report Banner */}
+        <ReportBanner />
 
       </main>
 

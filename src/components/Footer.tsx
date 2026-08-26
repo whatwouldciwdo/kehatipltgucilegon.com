@@ -80,11 +80,20 @@ export default function Footer() {
 
         {/* Lower Footer: Badges & Policy Links */}
         <div className="footer-lower-row">
-          {/* Left: Badges */}
+          {/* Left: PROPER Awards */}
           <div className="footer-badges">
-            <div className="badge-pill">PROPER EMAS</div>
-            <div className="badge-pill">ISO 14001</div>
-            <div className="badge-pill">ISO 9001</div>
+            <figure className="proper-award">
+              <img src="/images/Piala%20Proper/2023.png" alt="Piala PROPER Emas 2023" />
+              <figcaption>2023 - PROPER EMAS</figcaption>
+            </figure>
+            <figure className="proper-award">
+              <img src="/images/Piala%20Proper/2024.png" alt="Piala PROPER Emas 2024" />
+              <figcaption>2024 - PROPER EMAS</figcaption>
+            </figure>
+            <figure className="proper-award">
+              <img src="/images/Piala%20Proper/2025.png" alt="Piala PROPER Hijau 2025" />
+              <figcaption>2025 - PROPER HIJAU</figcaption>
+            </figure>
           </div>
 
           {/* Right: Policy Horizontal Links */}
@@ -272,18 +281,35 @@ export default function Footer() {
         .footer-badges {
           display: flex;
           gap: 1rem;
-          align-items: center;
+          align-items: flex-start;
+          flex-wrap: wrap;
         }
 
-        .badge-pill {
-          padding: 0.4rem 1rem;
-          border-radius: 30px;
+        .proper-award {
+          width: 150px;
+          margin: 0;
+          padding: 0.5rem;
+          border-radius: 12px;
           border: 1px solid rgba(250, 250, 250, 0.15);
-          font-size: 0.75rem;
-          font-weight: 600;
-          color: #ffffff;
-          letter-spacing: 0.05em;
           background-color: rgba(250, 250, 250, 0.03);
+          text-align: center;
+        }
+
+        .proper-award img {
+          display: block;
+          width: 100%;
+          aspect-ratio: 2 / 1;
+          object-fit: cover;
+          border-radius: 8px;
+        }
+
+        .proper-award figcaption {
+          margin-top: 0.6rem;
+          color: #ffffff;
+          font-size: 0.7rem;
+          font-weight: 600;
+          line-height: 1.3;
+          letter-spacing: 0.03em;
         }
 
         .footer-policy-links {
@@ -337,6 +363,12 @@ export default function Footer() {
           .footer-policy-links {
             gap: 1rem;
           }
+          .footer-badges {
+            width: 100%;
+          }
+          .proper-award {
+            width: calc(33.333% - 0.667rem);
+          }
         }
 
         @media (max-width: 480px) {
@@ -350,6 +382,12 @@ export default function Footer() {
           }
           .footer-kehati-logo {
             height: 48px;
+          }
+          .footer-badges {
+            gap: 0.75rem;
+          }
+          .proper-award {
+            width: 100%;
           }
         }
       `}</style>

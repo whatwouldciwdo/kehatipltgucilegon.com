@@ -27,8 +27,8 @@ export default function IntroAnimation() {
       const tiles = strip.querySelectorAll(`.${styles.tile}`);
 
       /* Initial States */
-      const tileRotations = [-10, -5, 0, 5, 10];
-      const tileOffsetsX = [-80, -40, 0, 40, 80];
+      const tileRotations = [-7, 0, 7];
+      const tileOffsetsX = [-48, 0, 48];
 
       gsap.set(tiles, {
         y: '18%',
@@ -150,19 +150,13 @@ export default function IntroAnimation() {
       {/* Image strip */}
       <div className={styles.strip} ref={stripRef}>
         <figure className={styles.tile}>
-          <img src="/img/1.jpg" alt="" />
-        </figure>
-        <figure className={styles.tile}>
-          <img src="/img/2.jpg" alt="" />
+          <img src="/images/Piala%20Proper/2024.png" alt="" />
         </figure>
         <figure className={styles.tile} ref={featureRef}>
-          <img src="/img/3.jpg" alt="" />
+          <img src="/images/Piala%20Proper/2023.png" alt="" />
         </figure>
         <figure className={styles.tile}>
-          <img src="/img/4.jpg" alt="" />
-        </figure>
-        <figure className={styles.tile}>
-          <img src="/img/5.jpg" alt="" />
+          <img src="/images/Piala%20Proper/2025.png" alt="" />
         </figure>
       </div>
     </section>

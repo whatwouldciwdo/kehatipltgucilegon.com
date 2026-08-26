@@ -33,8 +33,9 @@ export default function KehatiInitiatives() {
       id="kehati" 
       style={{
         padding: '7rem 0 9rem 0',
-        backgroundColor: '#f3f1eb', // Warm, dark-cream background to contrast with light-cream sections
+        backgroundColor: '#f3f1eb',
         width: '100%',
+        borderBottom: '1px solid var(--border-light)',
       }}
     >
       <div className="container" style={{ display: 'flex', flexDirection: 'column', gap: '4.5rem' }}>
@@ -124,7 +125,7 @@ export default function KehatiInitiatives() {
                   fontSize: '0.975rem',
                   color: 'var(--text-muted)',
                   lineHeight: '1.6',
-                  flexGrow: 1, // push stat and link to the bottom
+                  flexGrow: 1,
                   marginBottom: '2rem',
                 }}
               >
