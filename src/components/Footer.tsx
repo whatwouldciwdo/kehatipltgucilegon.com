@@ -19,6 +19,13 @@ export default function Footer() {
                 <span className="logo-subtitle">INDONESIA POWER</span>
                 <span className="logo-sub-subtitle">UBP CILEGON</span>
               </div>
+              <div className="footer-kehati-badge">
+                <img
+                  src="/images/logo-kehati-ubpclgv2.png"
+                  alt="Kehati UBP Cilegon"
+                  className="footer-kehati-logo"
+                />
+              </div>
             </div>
             
             <p className="footer-address">
@@ -124,6 +131,7 @@ export default function Footer() {
           display: flex;
           align-items: center;
           gap: 0.8rem;
+          flex-wrap: wrap;
         }
 
         .footer-logo-img {
@@ -136,6 +144,24 @@ export default function Footer() {
           display: flex;
           flex-direction: column;
           line-height: 1.1;
+        }
+
+        .footer-kehati-badge {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 0.4rem;
+          padding: 0.45rem 0.6rem;
+          border-radius: 12px;
+          background-color: #ffffff;
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+        }
+
+        .footer-kehati-logo {
+          display: block;
+          width: auto;
+          height: 54px;
+          object-fit: contain;
         }
 
         .logo-title {
@@ -317,6 +343,13 @@ export default function Footer() {
           .footer-green {
             margin: 0 12px;
             border-radius: 24px 24px 0 0;
+          }
+          .footer-kehati-badge {
+            margin-left: 0;
+            padding: 0.4rem 0.5rem;
+          }
+          .footer-kehati-logo {
+            height: 48px;
           }
         }
       `}</style>

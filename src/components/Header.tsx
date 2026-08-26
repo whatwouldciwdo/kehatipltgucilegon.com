@@ -140,6 +140,12 @@ export default function Header() {
                 <span className="logo-subtitle">INDONESIA POWER</span>
                 <span className="logo-sub-subtitle">UBP CILEGON</span>
               </div>
+              <span className="logo-divider" aria-hidden="true" />
+              <img
+                src="/images/logo-kehati-ubpclgv2.png"
+                alt="Kehati UBP Cilegon"
+                className="kehati-logo-img"
+              />
             </a>
           </div>
 
@@ -766,6 +772,19 @@ export default function Header() {
           height: 40px;
           width: auto;
           object-fit: contain;
+          flex-shrink: 0;
+        }
+        .logo-divider {
+          width: 1px;
+          height: 36px;
+          background-color: #d1d5db;
+          flex-shrink: 0;
+        }
+        .kehati-logo-img {
+          height: 42px;
+          width: auto;
+          object-fit: contain;
+          flex-shrink: 0;
         }
         .logo-text {
           display: flex;
@@ -784,7 +803,7 @@ export default function Header() {
           font-weight: 500;
           color: #000000;
           line-height: 1.1;
-          margin-top: -4px;
+          margin-top: -1px;
           letter-spacing: 0.08em;
         }
         .logo-sub-subtitle {
@@ -1333,6 +1352,14 @@ export default function Header() {
 
           .logo-img {
             height: 30px !important;
+          }
+
+          .logo-divider {
+            height: 26px;
+          }
+
+          .kehati-logo-img {
+            height: 30px;
           }
 
           .nav-left-group {
