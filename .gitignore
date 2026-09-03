@@ -38,6 +38,7 @@ yarn-error.log*
 
 # local temp (do not push)
 /temp-jangandipush/
+/temp/
 
 # typescript
 *.tsbuildinfo

@@ -4,7 +4,6 @@ import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
 interface CommunityEditorialSectionProps {
-  badgeImg?: string;
   portraitImg?: string;
   groupImg?: string;
   paragraphText?: string;
@@ -13,31 +12,21 @@ interface CommunityEditorialSectionProps {
 }
 
 export default function CommunityEditorialSection({
-  badgeImg = '/images/editorial/badge.png',
-  portraitImg = '/images/editorial/portrait.png',
+  portraitImg = '/images/pltgu-cilegon-2.png',
   groupImg = '/images/pembangkit.JPG',
   paragraphText = 'PLTGU Cilegon merupakan pembangkit listrik tenaga gas dan uap yang terhubung dalam sistem jaringan 150 kV dan masuk dalam bagian dari sistem ketenagalistrikan Jawa Bali. PLTGU Cilegon sendiri memiliki luas area 17 Ha di Desa Margasari, Kecamatan Puloampel, Kabupaten Serang, Banten dengan kapasitas terpasang 740 MW dan berbahan bakar gas alam.',
   ctaText = 'Profil PLTGU Cilegon',
   ctaHref = '#tentang',
 }: CommunityEditorialSectionProps) {
   return (
-    <section className="community-editorial-section" aria-label="Community Editorial">
+    <section className="community-editorial-section" aria-label="Profil & Kawasan PLTGU Cilegon">
       <div className="editorial-container">
-        {/* Left Column: Top Badge + Tall Portrait Image */}
-        <div className="editorial-left-col">
-          {badgeImg && (
-            <div className="editorial-badge-wrapper">
-              <img 
-                src={badgeImg} 
-                alt="Wesley College Crest Badge" 
-                className="editorial-badge-img" 
-              />
-            </div>
-          )}
+        {/* Left Column: Full-height Plant Image */}
+        <div className="editorial-left-col" data-reveal="left">
           <div className="editorial-portrait-wrapper">
             <img
               src={portraitImg}
-              alt="Community Life Portrait"
+              alt="Pembangkit Listrik Tenaga Gas dan Uap PLTGU Cilegon"
               className="editorial-portrait-img"
               loading="lazy"
             />
@@ -46,16 +35,16 @@ export default function CommunityEditorialSection({
 
         {/* Right Column: Landscape Group Image + Narrative Text + Arrow CTA Button */}
         <div className="editorial-right-col">
-          <div className="editorial-group-wrapper">
+          <div className="editorial-group-wrapper" data-reveal="right" data-reveal-delay="80">
             <img
               src={groupImg}
-              alt="Community Group Photo"
+              alt="Tim Operasional PT PLN Indonesia Power PLTGU Cilegon"
               className="editorial-group-img"
               loading="lazy"
             />
           </div>
 
-          <div className="editorial-text-content">
+          <div className="editorial-text-content" data-reveal data-reveal-delay="160">
             <p className="editorial-paragraph">{paragraphText}</p>
 
             <a href={ctaHref} className="editorial-cta-btn" aria-label={ctaText}>
@@ -70,9 +59,9 @@ export default function CommunityEditorialSection({
 
       <style jsx>{`
         .community-editorial-section {
-          background-color: #ffffff; /* Match 740 MW metrics section white background */
+          background-color: #ffffff;
           width: 100%;
-          padding: 4.5rem 0 7rem 0;
+          padding: clamp(3.5rem, 6vw, 6rem) 0 clamp(4.5rem, 7vw, 7rem) 0;
           position: relative;
           overflow: hidden;
           border-bottom: 1px solid var(--border-light, #e4e1d9);
@@ -80,12 +69,11 @@ export default function CommunityEditorialSection({
 
         .editorial-container {
           width: 100%;
-          max-width: 1280px;
-          margin: 0 auto;
-          padding: 0 3.5rem;
+          max-width: 100%;
+          padding: 0 clamp(1.5rem, 5vw, 6rem);
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 5.5rem;
+          gap: clamp(2.5rem, 5vw, 6rem);
           align-items: flex-start;
           box-sizing: border-box;
         }
@@ -98,28 +86,18 @@ export default function CommunityEditorialSection({
           width: 100%;
         }
 
-        .editorial-badge-wrapper {
-          margin-bottom: 1.25rem;
-        }
-
-        .editorial-badge-img {
-          width: 48px;
-          height: auto;
-          display: block;
-          object-fit: contain;
-        }
-
         .editorial-portrait-wrapper {
           width: 100%;
-          border-radius: 0;
+          border-radius: 4px;
           overflow: hidden;
           background-color: #f3f1eb;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 10px 32px rgba(0, 0, 0, 0.06);
         }
 
         .editorial-portrait-img {
           width: 100%;
           height: auto;
+          aspect-ratio: 4/3;
           display: block;
           object-fit: cover;
           transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -134,21 +112,21 @@ export default function CommunityEditorialSection({
           display: flex;
           flex-direction: column;
           width: 100%;
-          padding-top: 3.25rem; /* Align below left badge height */
         }
 
         .editorial-group-wrapper {
           width: 100%;
-          border-radius: 0;
+          border-radius: 4px;
           overflow: hidden;
           background-color: #f3f1eb;
-          margin-bottom: 3.5rem;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+          margin-bottom: clamp(2rem, 3.5vw, 3rem);
+          box-shadow: 0 10px 32px rgba(0, 0, 0, 0.06);
         }
 
         .editorial-group-img {
           width: 100%;
           height: auto;
+          aspect-ratio: 16/9;
           display: block;
           object-fit: cover;
           transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -162,13 +140,14 @@ export default function CommunityEditorialSection({
           display: flex;
           flex-direction: column;
           align-items: flex-start;
-          max-width: 480px;
+          width: 100%;
+          max-width: 580px;
         }
 
         .editorial-paragraph {
           font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
-          font-size: clamp(1rem, 1.25vw, 1.125rem);
-          line-height: 1.7;
+          font-size: clamp(1.05rem, 1.25vw, 1.175rem);
+          line-height: 1.75;
           color: #262927;
           letter-spacing: -0.01em;
           margin: 0 0 2.5rem 0;
@@ -179,6 +158,7 @@ export default function CommunityEditorialSection({
           display: inline-flex;
           align-items: center;
           gap: 0.85rem;
+          min-height: 44px;
           text-decoration: none;
           color: #1a1c1b;
           font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
@@ -188,13 +168,19 @@ export default function CommunityEditorialSection({
           transition: all 0.25s ease;
         }
 
+        .editorial-cta-btn:focus-visible {
+          outline: 2px solid var(--primary-green, #2d6a4f);
+          outline-offset: 4px;
+          border-radius: 4px;
+        }
+
         .cta-label {
           transition: color 0.2s ease;
         }
 
         .cta-circle-arrow {
-          width: 42px;
-          height: 42px;
+          width: 44px;
+          height: 44px;
           border-radius: 50%;
           border: 1px solid #1a1c1b;
           display: flex;
@@ -220,13 +206,13 @@ export default function CommunityEditorialSection({
 
         @media (max-width: 992px) {
           .community-editorial-section {
-            padding: 3rem 0 5rem 0;
+            padding: 3.5rem 0 5rem 0;
           }
 
           .editorial-container {
             grid-template-columns: 1fr;
             gap: 3.5rem;
-            padding: 0 2rem;
+            padding: 0 clamp(1.5rem, 4vw, 3rem);
           }
 
           .editorial-right-col {
@@ -234,7 +220,7 @@ export default function CommunityEditorialSection({
           }
 
           .editorial-group-wrapper {
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
           }
 
           .editorial-text-content {
@@ -245,21 +231,18 @@ export default function CommunityEditorialSection({
         @media (max-width: 576px) {
           .editorial-container {
             padding: 0 1.25rem;
-            gap: 2.5rem;
+            gap: 2.25rem;
           }
 
           .editorial-paragraph {
-            font-size: 0.95rem;
-            margin-bottom: 2rem;
-          }
-
-          .editorial-badge-img {
-            width: 40px;
+            font-size: 1rem;
+            line-height: 1.65;
+            margin-bottom: 1.75rem;
           }
 
           .cta-circle-arrow {
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
           }
         }
       `}</style>

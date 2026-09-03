@@ -88,18 +88,18 @@ export default function CollegeLifeShowcase({
   };
 
   return (
-    <section className="showcase-fullwidth-section" aria-label={title}>
+    <section id="kehati" className="showcase-fullwidth-section" aria-label={title}>
       {/* Top subtle divider rule */}
       <div className="section-top-divider" />
 
       {/* Header text container */}
-      <div className="showcase-header">
+      <div className="showcase-header" data-reveal>
         <h2 className="showcase-title">{title}</h2>
         {subtitle && <p className="showcase-subtitle">{subtitle}</p>}
       </div>
 
       {/* Full-Width Carousel Track Wrapper */}
-      <div className="carousel-fullwidth-wrapper">
+      <div className="carousel-fullwidth-wrapper" data-reveal="fade" data-reveal-delay="180">
         {/* Left & Right Frosted Glass Blur Edge Masks */}
         <div className="edge-blur-mask left-blur" aria-hidden="true" />
         <div className="edge-blur-mask right-blur" aria-hidden="true" />

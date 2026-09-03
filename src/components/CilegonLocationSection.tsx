@@ -24,9 +24,9 @@ export default function CilegonLocationSection({
 }: CilegonLocationSectionProps) {
   return (
     <section className="cilegon-location-section" aria-label="Geografis & Lokasi Kota Cilegon">
-      <div className="container location-container">
+      <div className="location-container">
         {/* Left Column: Text & CTA */}
-        <div className="location-text-col">
+        <div className="location-text-col" data-reveal="left">
           <span className="location-kicker">{kicker}</span>
           
           <h2 className="location-title">
@@ -49,7 +49,7 @@ export default function CilegonLocationSection({
         </div>
 
         {/* Right Column: Exact Vector Map with Float & Shadow */}
-        <div className="location-map-col">
+        <div className="location-map-col" data-reveal="right" data-reveal-delay="120">
           {/* Radial dot grid pattern background */}
           <div className="map-radial-grid" aria-hidden="true" />
 
@@ -82,7 +82,7 @@ export default function CilegonLocationSection({
       <style jsx>{`
         .cilegon-location-section {
           background-color: var(--bg-cream, #faf9f6);
-          padding: 6.5rem 0;
+          padding: clamp(4.5rem, 7vw, 7.5rem) 0;
           width: 100%;
           position: relative;
           overflow: hidden;
@@ -90,17 +90,22 @@ export default function CilegonLocationSection({
         }
 
         .location-container {
+          width: 100%;
+          max-width: 100%;
+          padding: 0 clamp(1.5rem, 5vw, 6rem);
           display: grid;
-          grid-template-columns: 1.15fr 1fr;
-          gap: 4.5rem;
+          grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+          gap: clamp(2.5rem, 5vw, 6rem);
           align-items: center;
-          max-width: 1300px;
+          box-sizing: border-box;
         }
 
         .location-text-col {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
+          width: 100%;
+          max-width: 680px;
           z-index: 2;
         }
 
@@ -131,17 +136,18 @@ export default function CilegonLocationSection({
 
         .location-description {
           font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
-          font-size: 1.05rem;
+          font-size: clamp(1.05rem, 1.25vw, 1.175rem);
           line-height: 1.75;
           color: var(--text-muted, #57655e);
           margin-bottom: 2.25rem;
-          max-width: 600px;
+          max-width: 620px;
         }
 
         .location-cta-link {
           display: inline-flex;
           align-items: center;
           gap: 0.65rem;
+          min-height: 44px;
           font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
           font-size: 0.85rem;
           font-weight: 700;
@@ -155,6 +161,12 @@ export default function CilegonLocationSection({
 
         .location-cta-link:hover {
           color: var(--bg-dark-green, #122c1e);
+        }
+
+        .location-cta-link:focus-visible {
+          outline: 2px solid var(--primary-green, #2d6a4f);
+          outline-offset: 4px;
+          border-radius: 4px;
         }
 
         .cta-arrow-icon {
@@ -171,7 +183,8 @@ export default function CilegonLocationSection({
           justify-content: center;
           align-items: center;
           position: relative;
-          min-height: 360px;
+          width: 100%;
+          min-height: 380px;
         }
 
         .map-radial-grid {
@@ -186,7 +199,7 @@ export default function CilegonLocationSection({
         .map-vector-wrapper {
           position: relative;
           width: 100%;
-          max-width: 500px;
+          max-width: 600px;
           aspect-ratio: 4 / 3;
           display: flex;
           align-items: center;
@@ -222,17 +235,22 @@ export default function CilegonLocationSection({
         }
 
         @media (max-width: 992px) {
-          .location-container {
-            grid-template-columns: 1fr;
-            gap: 3rem;
+          .cilegon-location-section {
+            padding: 4rem 0;
           }
 
-          .cilegon-location-section {
-            padding: 4.5rem 0;
+          .location-container {
+            grid-template-columns: 1fr;
+            gap: 3.5rem;
+            padding: 0 clamp(1.5rem, 4vw, 3rem);
           }
 
           .location-title {
             font-size: clamp(1.9rem, 5vw, 2.75rem);
+          }
+
+          .location-text-col {
+            max-width: 100%;
           }
 
           .location-map-col {
@@ -242,7 +260,12 @@ export default function CilegonLocationSection({
 
         @media (max-width: 576px) {
           .cilegon-location-section {
-            padding: 3.5rem 0;
+            padding: 3rem 0;
+          }
+
+          .location-container {
+            padding: 0 1.25rem;
+            gap: 2.5rem;
           }
 
           .location-description {

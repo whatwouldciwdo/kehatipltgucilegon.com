@@ -329,3 +329,77 @@ a {
   margin-top: 4rem;
   padding-top: 2.5rem;
 }
+
+/* ── Scroll Reveal Animations ─────────────────────────────────────────────
+   Purpose: guide attention through the page as the user scrolls down.
+   Elements start hidden/offset; .revealed class transitions them into view.
+   Four named variants via data-reveal attribute value:
+     [data-reveal]           → default: fade-up (text, headlines)
+     [data-reveal="left"]    → slide from left (leading images / photos)
+     [data-reveal="right"]   → slide from right (trailing images / cards)
+     [data-reveal="scale"]   → subtle scale-up (metric numbers, icons)
+     [data-reveal="fade"]    → pure opacity fade (full-width sections, banners)
+   R-19 antislop: one coherent motion language, not stacked template animations.
+   @media prefers-reduced-motion: all animations collapse to a simple fade.
+   ─────────────────────────────────────────────────────────────────────── */
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+[data-reveal="left"] {
+  opacity: 0;
+  transform: translateX(-36px);
+  transition:
+    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal="right"] {
+  opacity: 0;
+  transform: translateX(36px);
+  transition:
+    opacity 0.72s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.72s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal="scale"] {
+  opacity: 0;
+  transform: scale(0.88) translateY(16px);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal="fade"] {
+  opacity: 0;
+  transform: none;
+  transition: opacity 0.9s ease;
+}
+
+[data-reveal].revealed,
+[data-reveal="left"].revealed,
+[data-reveal="right"].revealed,
+[data-reveal="scale"].revealed,
+[data-reveal="fade"].revealed {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal="left"],
+  [data-reveal="right"],
+  [data-reveal="scale"],
+  [data-reveal="fade"] {
+    opacity: 0;
+    transform: none;
+    transition: opacity 0.4s ease;
+  }
+}
+

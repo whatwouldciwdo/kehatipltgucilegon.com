@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 interface ReportBannerProps {
   kicker?: string;
@@ -12,14 +14,19 @@ interface ReportBannerProps {
   backgroundImage?: string;
 }
 
-export default function ReportBanner({
-  kicker = '\\ Laporan Kinerja Lingkungan & Kehati',
-  title = 'Komitmen Nyata Menuju PROPER Emas 2025',
-  description = 'Pelajari bagaimana PT PLN Indonesia Power UBP Cilegon mengintegrasikan efisiensi energi, reduksi emisi, dan pelestarian flora fauna endemik Selat Sunda dalam mewujudkan ekosistem energi hijau berkelanjutan.',
-  ctaText = 'Unduh Ringkasan Kinerja',
-  ctaHref = '#tentang',
-  backgroundImage = '/images/pembangkit.JPG',
-}: ReportBannerProps) {
+export default function ReportBanner(props: ReportBannerProps) {
+  const { t } = useLanguage();
+
+  const kicker = props.kicker || t('\\ Laporan Implementasi Kehati 2023 - 2026', '\\ Biodiversity Implementation Reports 2023 - 2026');
+  const title = props.title || t('Kompilasi Capaian Keanekaragaman Hayati PLTGU Cilegon', 'PLTGU Cilegon Biodiversity Achievements Compilation');
+  const description = props.description || t(
+    'Pelajari data pemantauan berkala flora dan fauna kawasan konservasi Ring 1, restorasi 19.000 mangrove pesisir, peningkatan 1.122 individu aves, hingga sistem cerdas Biowing Connect dan C-Flora IoT.',
+    'Explore comprehensive periodic monitoring data of Ring 1 flora & fauna, 19,000 coastal mangroves, 1,122 avian population, through smart Biowing Connect and C-Flora IoT systems.'
+  );
+  const ctaText = props.ctaText || t('Lihat Halaman Laporan (2023 - 2026)', 'View Report Pages (2023 - 2026)');
+  const ctaHref = props.ctaHref || '/laporan';
+  const backgroundImage = props.backgroundImage || '/images/pembangkit.JPG';
+
   return (
     <section 
       className="report-banner-section" 
@@ -29,12 +36,13 @@ export default function ReportBanner({
         <div 
           className="report-banner-card"
           style={{ backgroundImage: `url(${backgroundImage})` }}
+          data-reveal="fade"
         >
           {/* Subtle background gradient overlay for depth */}
           <div className="report-banner-overlay" />
 
           {/* White Editorial Content Box */}
-          <div className="report-content-box">
+          <div className="report-content-box" data-reveal="left" data-reveal-delay="200">
             <span className="report-kicker">{kicker}</span>
             
             <h2 className="report-title">
@@ -46,14 +54,14 @@ export default function ReportBanner({
             </p>
             
             <div>
-              <a 
+              <Link 
                 href={ctaHref} 
                 className="report-cta-link"
                 aria-label={`${ctaText} - ${title}`}
               >
                 <span className="report-cta-text">{ctaText}</span>
                 <ArrowUpRight className="report-cta-icon" size={20} aria-hidden="true" />
-              </a>
+              </Link>
             </div>
           </div>
         </div>

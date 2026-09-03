@@ -1,30 +1,46 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Trees, Bird, Waves, ArrowUpRight } from 'lucide-react';
+import { useLanguage } from '@/context/LanguageContext';
 
 export default function KehatiInitiatives() {
+  const { t } = useLanguage();
+
   const initiatives = [
     {
       icon: <Trees size={32} style={{ color: 'var(--primary-green)' }} />,
-      title: 'Taman Kehati & Flora Endemik',
-      badge: 'Konservasi Flora',
-      desc: 'Pengembangan kawasan hijau seluas 1.5 hektar untuk pelestarian pohon langka khas Banten seperti Kedawung, Merbau, dan buah lokal endemik guna mempertahankan plasma nutfah.',
-      stats: '45+ Spesies Flora'
+      title: t('Taman Kehati & Flora Konservasi', 'Kehati Park & Flora Conservation'),
+      badge: t('Konservasi Flora', 'Flora Conservation'),
+      desc: t(
+        'Pengembangan kawasan hijau seluas 17.7 hektar (Ring 1) untuk pelestarian pohon langka dan endemik seperti Angsana, Mahoni, Pohon Pelangi, Palem Botol, serta sistem C-Flora IoT.',
+        'Developing a 17.7-hectare green conservation zone (Ring 1) preserving rare and endemic trees including Angsana, Mahogany, Rainbow Eucalyptus, Bottle Palm, and C-Flora IoT.'
+      ),
+      stats: t('137 Spesies (23.670 Batang)', '137 Species (23,670 Stems)'),
+      href: '/laporan/2026#flora'
     },
     {
       icon: <Bird size={32} style={{ color: 'var(--primary-green)' }} />,
-      title: 'Perlindungan Fauna & Burung Lokal',
-      badge: 'Konservasi Fauna',
-      desc: 'Pemantauan dan penyediaan habitat alami bagi burung lokal (Elang Bondol, Raja Udang) serta kupu-kupu di sekitar area pembangkit untuk memulihkan keseimbangan ekosistem.',
-      stats: '28 Spesies Terdata'
+      title: t('Perlindungan Fauna & Biowing Connect', 'Fauna Protection & Biowing Connect'),
+      badge: t('Konservasi Fauna', 'Fauna Conservation'),
+      desc: t(
+        'Pemantauan 52 jenis fauna dan 1.122 individu aves via sistem Biowing Connect yang memanfaatkan burung sebagai penyebar benih alami regenerasi keanekaragaman hayati.',
+        'Monitoring 52 fauna species and 1,122 birds via Biowing Connect system utilizing avian natural seed dispersal for ecosystem regeneration.'
+      ),
+      stats: t('52 Jenis (1.268 Individu)', '52 Species (1,268 Fauna)'),
+      href: '/laporan/2026#fauna'
     },
     {
       icon: <Waves size={32} style={{ color: 'var(--primary-green)' }} />,
-      title: 'Restorasi Mangrove Pesisir Cilegon',
-      badge: 'Ekosistem Pesisir',
-      desc: 'Penanaman bibit mangrove secara berkala di pesisir Cilegon untuk mencegah abrasi pantai, menyerap karbon, serta menyediakan tempat pemijahan (nursery ground) biota laut.',
-      stats: '12,000+ Mangrove Ditanam'
+      title: t('Restorasi Mangrove Pesisir Serang', 'Coastal Mangrove Restoration Serang'),
+      badge: t('Ekosistem Pesisir', 'Coastal Ecosystem'),
+      desc: t(
+        'Penanaman kumulatif 19.000 bibit mangrove Rhizophora apiculata di pesisir kritis Desa Lontar, Kec. Tirtayasa bekerjasama dengan DLH Kab. Serang dan KTH Segara Biru.',
+        'Cumulative planting of 19,000 Rhizophora apiculata mangrove seedlings in critical coastlines of Lontar Village, partnering with Serang Environmental Agency.'
+      ),
+      stats: t('19.000 Pohon (0,45 Ha)', '19,000 Mangroves (0.45 Ha)'),
+      href: '/laporan/2026#program-mangrove'
     }
   ];
 
@@ -148,8 +164,8 @@ export default function KehatiInitiatives() {
                   <span style={{ fontSize: '1.05rem', color: 'var(--bg-dark-green)', fontWeight: 700 }}>{item.stats}</span>
                 </div>
                 
-                <a 
-                  href="#tentang" 
+                <Link 
+                  href={item.href} 
                   style={{
                     width: '36px',
                     height: '36px',
@@ -162,9 +178,10 @@ export default function KehatiInitiatives() {
                     transition: 'var(--transition-fast)',
                   }}
                   className="arrow-link"
+                  aria-label={item.title}
                 >
                   <ArrowUpRight size={18} />
-                </a>
+                </Link>
               </div>
             </div>
           ))}

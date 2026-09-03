@@ -1,8 +1,11 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Leaf, Search, Heart, User, Globe, ChevronDown, FileText, Wind, Award, Compass, Trees, Users, Activity, HelpCircle, ShieldCheck, ArrowRight, ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Leaf, Search, Heart, User, Globe, ChevronDown, FileText, Wind, Award, Compass, Trees, Users, Activity, HelpCircle, ShieldCheck, ArrowRight, ArrowLeft, BarChart3, Camera } from 'lucide-react';
 import gsap from 'gsap';
+import { useLanguage } from '@/context/LanguageContext';
 
 // Custom wheelchair SVG to match the reference icon exactly
 const WheelchairIcon = ({ size = 18 }: { size?: number }) => (
@@ -24,8 +27,11 @@ const WheelchairIcon = ({ size = 18 }: { size?: number }) => (
 );
 
 export default function Header() {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
+  const { lang, toggleLang, t } = useLanguage();
   const [showUtility, setShowUtility] = useState(true);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(!isHomePage);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [mobileSubmenu, setMobileSubmenu] = useState<string | null>(null);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -60,7 +66,7 @@ export default function Header() {
       }
 
       // Stage 2: Collapse/expand based on scroll position (hero visibility)
-      if (y > threshold) {
+      if (!isHomePage || y > threshold) {
         setIsCollapsed(true);
       } else {
         setIsCollapsed(false);
@@ -96,12 +102,19 @@ export default function Header() {
 
   useEffect(() => {
     if (headerRef.current) {
-      gsap.fromTo(headerRef.current,
-        { y: -200, opacity: 0 },
-        { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out', delay: 6.0 }
-      );
+      if (isHomePage) {
+        gsap.fromTo(headerRef.current,
+          { y: -200, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out', delay: 6.0 }
+        );
+      } else {
+        gsap.fromTo(headerRef.current,
+          { y: -50, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.5, ease: 'power3.out', delay: 0 }
+        );
+      }
     }
-  }, []);
+  }, [isHomePage]);
 
   const handleLinkClick = (href: string) => {
     const targetElement = document.querySelector(href);
@@ -114,14 +127,14 @@ export default function Header() {
     <>
       <header
         ref={headerRef}
-        className={`header-wrapper ${isCollapsed ? 'header-collapsed' : ''} ${isMenuOpen ? 'menu-open-active' : ''} ${activeDropdown ? 'has-dropdown-open' : ''} ${isNavbarHidden ? 'navbar-hidden' : ''} ${isCollapsed && showUtility ? 'utility-visible' : ''}`}
+        className={`header-wrapper ${(!isHomePage || isCollapsed) ? 'header-collapsed' : ''} ${isMenuOpen ? 'menu-open-active' : ''} ${activeDropdown ? 'has-dropdown-open' : ''} ${isNavbarHidden ? 'navbar-hidden' : ''} ${((!isHomePage || isCollapsed) && showUtility) ? 'utility-visible' : ''}`}
       >
         {/* Top Navigation Bar containing Hamburger, Logo, Links, and Icons */}
         <div className="main-nav">
           {/* Left Group: Hamburger + Logo */}
           <div className="nav-left-group">
             <button 
-              className={`hamburger-btn ${isMenuOpen ? 'open' : ''} ${isCollapsed ? 'scrolled' : ''}`}
+              className={`hamburger-btn ${isMenuOpen ? 'open' : ''} ${(!isHomePage || isCollapsed) ? 'scrolled' : ''}`}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle Menu"
             >
@@ -130,8 +143,7 @@ export default function Header() {
             </button>
 
             <a 
-              href="#" 
-              onClick={(e) => { e.preventDefault(); handleLinkClick('#'); }}
+              href="/"
               className="logo"
             >
               <img src="/images/logo-pln.png" alt="PLN Logo" className="logo-img" />
@@ -153,8 +165,13 @@ export default function Header() {
           <nav className="nav-links">
             <div className="nav-item-group">
               <a 
-                href="#proper" 
-                onClick={(e) => { e.preventDefault(); handleLinkClick('#proper'); }} 
+                href="/#proper" 
+                onClick={(e) => { 
+                  if (window.location.pathname === '/') {
+                    e.preventDefault(); 
+                    handleLinkClick('#proper'); 
+                  }
+                }} 
                 className="nav-link-text"
               >
                 PROPER KLHK
@@ -170,11 +187,16 @@ export default function Header() {
 
             <div className="nav-item-group">
               <a 
-                href="#kehati" 
-                onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); }} 
+                href="/#kehati" 
+                onClick={(e) => { 
+                  if (window.location.pathname === '/') {
+                    e.preventDefault(); 
+                    handleLinkClick('#kehati'); 
+                  }
+                }} 
                 className="nav-link-text"
               >
-                Keanekaragaman Hayati
+                {t('Keanekaragaman Hayati', 'Biodiversity')}
               </a>
               <button 
                 onClick={() => setActiveDropdown(activeDropdown === 'kehati' ? null : 'kehati')}
@@ -186,12 +208,35 @@ export default function Header() {
             </div>
 
             <div className="nav-item-group">
-              <a 
-                href="#tentang" 
-                onClick={(e) => { e.preventDefault(); handleLinkClick('#tentang'); }} 
+              <Link 
+                href="/laporan"
                 className="nav-link-text"
               >
-                Tentang Kami
+                {t('Laporan 2023-2026', 'Reports 2023-2026')}
+              </Link>
+            </div>
+
+            <div className="nav-item-group">
+              <Link 
+                href="/galeri"
+                className="nav-link-text"
+              >
+                {t('Galeri', 'Gallery')}
+              </Link>
+            </div>
+
+            <div className="nav-item-group">
+              <a 
+                href="/#tentang" 
+                onClick={(e) => { 
+                  if (window.location.pathname === '/') {
+                    e.preventDefault(); 
+                    handleLinkClick('#tentang'); 
+                  }
+                }} 
+                className="nav-link-text"
+              >
+                {t('Tentang Kami', 'About Us')}
               </a>
               <button 
                 onClick={() => setActiveDropdown(activeDropdown === 'tentang' ? null : 'tentang')}
@@ -221,25 +266,28 @@ export default function Header() {
         <div className={`utility-collapsible ${!showUtility ? 'collapsed' : ''}`}>
           <div className="utility-bar">
             <div className="utility-links">
-              <a href="#proper" onClick={(e) => { e.preventDefault(); handleLinkClick('#proper'); }}>Laporan Tahunan</a>
-              <a href="#kontak" onClick={(e) => { e.preventDefault(); handleLinkClick('#kontak'); }}>Kontak UBP</a>
+              <Link href="/laporan">{t('Laporan Tahunan', 'Annual Reports')}</Link>
+              <a href="/#kontak">{t('Kontak UBP', 'Contact UBP')}</a>
             </div>
             <span className="divider">|</span>
             <div className="socials">
-              <a href="#" aria-label="Facebook">f</a>
               <a href="#" aria-label="Instagram">ig</a>
-              <a href="#" aria-label="LinkedIn">in</a>
               <a href="#" aria-label="YouTube">yt</a>
             </div>
             <span className="divider">|</span>
             <a href="#masuk" className="utility-action">
               <User size={14} />
-              <span>Masuk</span>
+              <span>{t('Masuk', 'Login')}</span>
             </a>
             <span className="divider">|</span>
-            <button className="lang-btn">
+            <button 
+              className="lang-btn"
+              onClick={toggleLang}
+              title={lang === 'id' ? 'Switch to English' : 'Ganti ke Bahasa Indonesia'}
+              style={{ cursor: 'pointer' }}
+            >
               <Globe size={14} />
-              <span>ID</span>
+              <span style={{ fontWeight: 700, letterSpacing: '0.05em' }}>{lang.toUpperCase()}</span>
               <ChevronDown size={12} style={{ marginLeft: '2px' }} />
             </button>
           </div>
@@ -299,83 +347,105 @@ export default function Header() {
 
             {activeDropdown === 'kehati' && (
               <div className="megamenu-content">
-                <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setActiveDropdown(null); }} className="megamenu-item">
+                <a href="/laporan/2026#program-mangrove" onClick={() => setActiveDropdown(null)} className="megamenu-item">
                   <div className="megamenu-item-content">
                     <div className="megamenu-icon">
                       <Compass size={20} />
                     </div>
-                    <span className="megamenu-text">Restorasi Mangrove</span>
+                    <span className="megamenu-text">{t('Restorasi Mangrove', 'Mangrove Restoration')}</span>
                   </div>
                   <div className="megamenu-item-arrow">
                     <ArrowRight size={16} />
                   </div>
                 </a>
-                <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setActiveDropdown(null); }} className="megamenu-item">
+                <a href="/laporan/2026#program-pelestarian-alami" onClick={() => setActiveDropdown(null)} className="megamenu-item">
                   <div className="megamenu-item-content">
                     <div className="megamenu-icon">
                       <Trees size={20} />
                     </div>
-                    <span className="megamenu-text">Taman Kehati</span>
+                    <span className="megamenu-text">{t('Taman Kehati', 'Kehati Park')}</span>
                   </div>
                   <div className="megamenu-item-arrow">
                     <ArrowRight size={16} />
                   </div>
                 </a>
-                <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setActiveDropdown(null); }} className="megamenu-item">
+                <a href="/laporan/2026#program-biowing-connect" onClick={() => setActiveDropdown(null)} className="megamenu-item">
                   <div className="megamenu-item-content">
                     <div className="megamenu-icon">
                       <Leaf size={20} />
                     </div>
-                    <span className="megamenu-text">Konservasi Flora</span>
+                    <span className="megamenu-text">{t('Konservasi Flora', 'Flora Conservation')}</span>
                   </div>
                   <div className="megamenu-item-arrow">
                     <ArrowRight size={16} />
                   </div>
                 </a>
-                <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setActiveDropdown(null); }} className="megamenu-item">
+                <a href="/laporan/2026#program-apotek-hidup" onClick={() => setActiveDropdown(null)} className="megamenu-item">
                   <div className="megamenu-item-content">
                     <div className="megamenu-icon">
                       <Users size={20} />
                     </div>
-                    <span className="megamenu-text">Pemberdayaan</span>
+                    <span className="megamenu-text">{t('Pemberdayaan', 'Community Empowerment')}</span>
                   </div>
                   <div className="megamenu-item-arrow">
                     <ArrowRight size={16} />
                   </div>
                 </a>
+                <Link href="/galeri" onClick={() => setActiveDropdown(null)} className="megamenu-item">
+                  <div className="megamenu-item-content">
+                    <div className="megamenu-icon">
+                      <Camera size={20} />
+                    </div>
+                    <span className="megamenu-text">{t('Galeri Kehati', 'Kehati Gallery')}</span>
+                  </div>
+                  <div className="megamenu-item-arrow">
+                    <ArrowRight size={16} />
+                  </div>
+                </Link>
               </div>
             )}
 
             {activeDropdown === 'tentang' && (
               <div className="megamenu-content">
-                <a href="#tentang" onClick={(e) => { e.preventDefault(); handleLinkClick('#tentang'); setActiveDropdown(null); }} className="megamenu-item">
+                <a href="/#tentang" onClick={(e) => { if (window.location.pathname === '/') { e.preventDefault(); handleLinkClick('#tentang'); } setActiveDropdown(null); }} className="megamenu-item">
                   <div className="megamenu-item-content">
                     <div className="megamenu-icon">
                       <Award size={20} />
                     </div>
-                    <span className="megamenu-text">Visi & Misi</span>
+                    <span className="megamenu-text">{t('Visi & Misi', 'Vision & Mission')}</span>
                   </div>
                   <div className="megamenu-item-arrow">
                     <ArrowRight size={16} />
                   </div>
                 </a>
-                <a href="#tentang" onClick={(e) => { e.preventDefault(); handleLinkClick('#tentang'); setActiveDropdown(null); }} className="megamenu-item">
+                <a href="/profil-ubp-cilegon" onClick={() => setActiveDropdown(null)} className="megamenu-item">
                   <div className="megamenu-item-content">
                     <div className="megamenu-icon">
                       <Compass size={20} />
                     </div>
-                    <span className="megamenu-text">Profil UBP</span>
+                    <span className="megamenu-text">{t('Profil UBP', 'UBP Profile')}</span>
                   </div>
                   <div className="megamenu-item-arrow">
                     <ArrowRight size={16} />
                   </div>
                 </a>
-                <a href="#tentang" onClick={(e) => { e.preventDefault(); handleLinkClick('#tentang'); setActiveDropdown(null); }} className="megamenu-item">
+                <Link href="/praktik-tata-kelola" onClick={() => setActiveDropdown(null)} className="megamenu-item">
+                  <div className="megamenu-item-content">
+                    <div className="megamenu-icon">
+                      <ShieldCheck size={20} />
+                    </div>
+                    <span className="megamenu-text">{t('Praktik Tata Kelola', 'Governance (GCG)')}</span>
+                  </div>
+                  <div className="megamenu-item-arrow">
+                    <ArrowRight size={16} />
+                  </div>
+                </Link>
+                <a href="/#tentang" onClick={(e) => { if (window.location.pathname === '/') { e.preventDefault(); handleLinkClick('#tentang'); } setActiveDropdown(null); }} className="megamenu-item">
                   <div className="megamenu-item-content">
                     <div className="megamenu-icon">
                       <HelpCircle size={20} />
                     </div>
-                    <span className="megamenu-text">Hubungi Kami</span>
+                    <span className="megamenu-text">{t('Hubungi Kami', 'Contact Us')}</span>
                   </div>
                   <div className="megamenu-item-arrow">
                     <ArrowRight size={16} />
@@ -386,28 +456,33 @@ export default function Header() {
           </div>
         )}
 
-        {/* Desktop Hero Main Content (Collapsible at Stage 2) */}
-        <div className="collapsible-content" style={{ marginTop: isCollapsed ? '0' : '3.5rem' }}>
-          <div className="hero-split">
-            {/* Left Column: Big Headline */}
-            <div className="hero-left">
-              <h1 className="hero-title">
-                Energi Bersih,<br />
-                Lestari Negeriku.
-              </h1>
-            </div>
+        {/* Desktop Hero Main Content (Rendered only on Homepage) */}
+        {isHomePage && (
+          <div className="collapsible-content" style={{ marginTop: isCollapsed ? '0' : '3.5rem' }}>
+            <div className="hero-split">
+              {/* Left Column: Big Headline */}
+              <div className="hero-left">
+                <h1 className="hero-title">
+                  {t('Energi Bersih,', 'Clean Energy,')}<br />
+                  {t('Lestari Negeriku.', 'Sustaining Our Nation.')}
+                </h1>
+              </div>
 
-            {/* Right Column: Description & Action */}
-            <div className="hero-right">
-              <p className="hero-desc">
-                Pembangkit Listrik Tenaga Gas dan Uap (PLTGU) Cilegon hadir sebagai pelopor energi andal ramah lingkungan, bersinergi menjaga kelestarian keanekaragaman hayati menuju masa depan hijau.
-              </p>
-              <a href="#proper" className="btn-green">
-                Pelajari PROPER
-              </a>
+              {/* Right Column: Description & Action */}
+              <div className="hero-right">
+                <p className="hero-desc">
+                  {t(
+                    'Pembangkit Listrik Tenaga Gas dan Uap (PLTGU) Cilegon hadir sebagai pelopor energi andal ramah lingkungan, bersinergi menjaga kelestarian keanekaragaman hayati menuju masa depan hijau.',
+                    'Cilegon Combined Cycle Power Plant (PLTGU) pioneers reliable and eco-friendly energy, harmoniously preserving biodiversity towards a sustainable green future.'
+                  )}
+                </p>
+                <a href="/#proper" className="btn-green">
+                  {t('Pelajari PROPER', 'Explore PROPER')}
+                </a>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Mobile Menu Drawer (Visible only when isMenuOpen is true on mobile viewports) */}
         {isMenuOpen && (
@@ -422,11 +497,15 @@ export default function Header() {
                     <span className="arrow-right">→</span>
                   </button>
                   <button onClick={() => setMobileSubmenu('kehati')} className="mobile-nav-item">
-                    <span>Keanekaragaman Hayati</span>
+                    <span>{t('Keanekaragaman Hayati', 'Biodiversity')}</span>
                     <span className="arrow-right">→</span>
                   </button>
+                  <Link href="/laporan" onClick={() => setIsMenuOpen(false)} className="mobile-nav-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span>{t('Laporan 2023-2026', 'Reports 2023-2026')}</span>
+                    <span className="arrow-right">→</span>
+                  </Link>
                   <button onClick={() => setMobileSubmenu('tentang')} className="mobile-nav-item">
-                    <span>Tentang Kami</span>
+                    <span>{t('Tentang Kami', 'About Us')}</span>
                     <span className="arrow-right">→</span>
                   </button>
                 </div>
@@ -436,11 +515,15 @@ export default function Header() {
                   <div className="mobile-actions-row">
                     <a href="#masuk" onClick={() => setIsMenuOpen(false)} className="mobile-action-btn">
                       <User size={16} />
-                      <span>Masuk</span>
+                      <span>{t('Masuk', 'Login')}</span>
                     </a>
-                    <button className="mobile-lang-btn">
+                    <button 
+                      className="mobile-lang-btn"
+                      onClick={toggleLang}
+                      style={{ cursor: 'pointer' }}
+                    >
                       <Globe size={16} />
-                      <span>ID</span>
+                      <span style={{ fontWeight: 700 }}>{lang.toUpperCase()}</span>
                       <ChevronDown size={14} />
                     </button>
                   </div>
@@ -448,8 +531,8 @@ export default function Header() {
                   <div className="mobile-divider"></div>
 
                   <div className="mobile-extra-links">
-                    <a href="#proper" onClick={() => setIsMenuOpen(false)}>Laporan Tahunan</a>
-                    <a href="#kontak" onClick={() => setIsMenuOpen(false)}>Kontak UBP</a>
+                    <Link href="/laporan" onClick={() => setIsMenuOpen(false)}>{t('Laporan Tahunan', 'Annual Reports')}</Link>
+                    <a href="/#kontak" onClick={() => setIsMenuOpen(false)}>{t('Kontak UBP', 'Contact UBP')}</a>
                   </div>
 
                   <div className="mobile-bottom-bar">
@@ -457,9 +540,7 @@ export default function Header() {
                       <Leaf size={18} style={{ color: '#ffffff' }} />
                     </div>
                     <div className="mobile-social-icons">
-                      <a href="#" aria-label="Facebook">f</a>
                       <a href="#" aria-label="Instagram">ig</a>
-                      <a href="#" aria-label="LinkedIn">in</a>
                       <a href="#" aria-label="YouTube">yt</a>
                     </div>
                   </div>
@@ -503,22 +584,26 @@ export default function Header() {
                   )}
                   {mobileSubmenu === 'kehati' && (
                     <>
-                      <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
+                      <Link href="/laporan/2026#program-mangrove" onClick={() => { setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
                         <Compass size={18} />
-                        <span>Restorasi Mangrove</span>
-                      </a>
-                      <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
+                        <span>{t('Restorasi Mangrove', 'Mangrove Restoration')}</span>
+                      </Link>
+                      <Link href="/laporan/2026#program-pelestarian-alami" onClick={() => { setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
                         <Trees size={18} />
-                        <span>Taman Kehati</span>
-                      </a>
-                      <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
+                        <span>{t('Taman Kehati', 'Kehati Park')}</span>
+                      </Link>
+                      <Link href="/laporan/2026#program-biowing-connect" onClick={() => { setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
                         <Leaf size={18} />
-                        <span>Konservasi Flora</span>
-                      </a>
-                      <a href="#kehati" onClick={(e) => { e.preventDefault(); handleLinkClick('#kehati'); setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
+                        <span>{t('Konservasi Flora', 'Flora Conservation')}</span>
+                      </Link>
+                      <Link href="/laporan/2026#program-apotek-hidup" onClick={() => { setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
                         <Users size={18} />
-                        <span>Pemberdayaan</span>
-                      </a>
+                        <span>{t('Pemberdayaan', 'Community Empowerment')}</span>
+                      </Link>
+                      <Link href="/galeri" onClick={() => { setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
+                        <Camera size={18} />
+                        <span>{t('Galeri Kehati', 'Kehati Gallery')}</span>
+                      </Link>
                     </>
                   )}
                   {mobileSubmenu === 'tentang' && (
@@ -527,10 +612,14 @@ export default function Header() {
                         <Award size={18} />
                         <span>Visi & Misi</span>
                       </a>
-                      <a href="#tentang" onClick={(e) => { e.preventDefault(); handleLinkClick('#tentang'); setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
+                      <a href="/profil-ubp-cilegon" onClick={() => { setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
                         <Compass size={18} />
                         <span>Profil UBP</span>
                       </a>
+                      <Link href="/praktik-tata-kelola" onClick={() => { setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
+                        <ShieldCheck size={18} />
+                        <span>Praktik Tata Kelola</span>
+                      </Link>
                       <a href="#tentang" onClick={(e) => { e.preventDefault(); handleLinkClick('#tentang'); setIsMenuOpen(false); setMobileSubmenu(null); }} className="mobile-submenu-item">
                         <HelpCircle size={18} />
                         <span>Hubungi Kami</span>
@@ -762,34 +851,46 @@ export default function Header() {
           order: 2;
         }
 
-        .logo {
-          display: flex;
-          align-items: center;
-          gap: 0.8rem;
+        .logo,
+        :global(.logo) {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          gap: 0.8rem !important;
           text-decoration: none;
+          flex-shrink: 0;
+          white-space: nowrap;
         }
-        .logo-img {
+        .logo-img,
+        :global(.logo-img) {
           height: 40px;
           width: auto;
           object-fit: contain;
           flex-shrink: 0;
+          display: block;
         }
-        .logo-divider {
+        .logo-divider,
+        :global(.logo-divider) {
           width: 1px;
           height: 36px;
           background-color: #d1d5db;
           flex-shrink: 0;
+          display: block;
         }
-        .kehati-logo-img {
+        .kehati-logo-img,
+        :global(.kehati-logo-img) {
           height: 42px;
           width: auto;
           object-fit: contain;
           flex-shrink: 0;
+          display: block;
         }
-        .logo-text {
+        .logo-text,
+        :global(.logo-text) {
           display: flex;
           flex-direction: column;
           line-height: 1.1;
+          flex-shrink: 0;
         }
         .logo-title {
           font-size: 1.2rem;
@@ -897,14 +998,16 @@ export default function Header() {
           }
         }
 
-        .megamenu-content {
+        .megamenu-content,
+        :global(.megamenu-content) {
           display: flex;
           justify-content: space-between;
           align-items: center;
           width: 100%;
         }
 
-        .megamenu-item {
+        .megamenu-item,
+        :global(.megamenu-item) {
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -919,13 +1022,15 @@ export default function Header() {
           box-sizing: border-box;
         }
 
-        .megamenu-item:hover {
+        .megamenu-item:hover,
+        :global(.megamenu-item:hover) {
           color: #1e3f35;
           background-color: #ffffff;
           box-shadow: 0 10px 25px rgba(0, 0, 0, 0.04);
         }
 
-        .megamenu-item-content {
+        .megamenu-item-content,
+        :global(.megamenu-item-content) {
           display: flex;
           flex-direction: column;
           align-items: flex-start;
@@ -934,7 +1039,8 @@ export default function Header() {
           gap: 0.5rem;
         }
 
-        .megamenu-icon {
+        .megamenu-icon,
+        :global(.megamenu-icon) {
           color: #1e3f35;
           display: flex;
           align-items: center;
@@ -942,11 +1048,13 @@ export default function Header() {
           transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .megamenu-item:hover .megamenu-icon {
+        .megamenu-item:hover .megamenu-icon,
+        :global(.megamenu-item:hover .megamenu-icon) {
           transform: translateY(-2px);
         }
 
-        .megamenu-text {
+        .megamenu-text,
+        :global(.megamenu-text) {
           font-size: 0.85rem;
           font-weight: 600;
           line-height: 1.3;
@@ -955,11 +1063,13 @@ export default function Header() {
           transition: color 0.2s ease;
         }
 
-        .megamenu-item:hover .megamenu-text {
+        .megamenu-item:hover .megamenu-text,
+        :global(.megamenu-item:hover .megamenu-text) {
           color: #1e3f35;
         }
 
-        .megamenu-item-arrow {
+        .megamenu-item-arrow,
+        :global(.megamenu-item-arrow) {
           opacity: 0;
           transform: translateX(-5px);
           transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -969,7 +1079,8 @@ export default function Header() {
           justify-content: center;
         }
 
-        .megamenu-item:hover .megamenu-item-arrow {
+        .megamenu-item:hover .megamenu-item-arrow,
+        :global(.megamenu-item:hover .megamenu-item-arrow) {
           opacity: 1;
           transform: translateX(0);
         }

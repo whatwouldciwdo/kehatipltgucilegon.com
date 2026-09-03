@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -30,19 +31,17 @@ export default function Footer() {
             
             <p className="footer-address">
               PT PLN Indonesia Power UBP Cilegon<br />
-              Jl. Raya Merak KM. 119, Suralaya, Pulomerak,<br />
-              Kota Cilegon, Banten 42438, Indonesia.
+              Jalan Raya Bojonegara, Margasari, Kec. Puloampel,<br />
+              Kabupaten Serang, Banten 42454
             </p>
             
             <div className="footer-contact">
-              <span>Tel: +62 254 5750077</span>
-              <span>Email: info@plnindonesiapower.co.id</span>
+              <span>Tel: 0254-5751555</span>
+              <span>Email: umum.clg@plnindonesiapower.co.id</span>
             </div>
             
             <div className="footer-socials">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="social-icon">f</a>
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-icon">ig</a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="social-icon">in</a>
               <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="social-icon">yt</a>
             </div>
           </div>
@@ -59,6 +58,7 @@ export default function Footer() {
           {/* Column 3: Kehati Sublinks */}
           <div className="footer-nav-col">
             <h3>Keanekaragaman Hayati</h3>
+            <Link href="/galeri">Galeri Kehati</Link>
             <a href="#kehati">Restorasi Mangrove</a>
             <a href="#kehati">Taman Kehati</a>
             <a href="#kehati">Konservasi Flora</a>
@@ -69,7 +69,8 @@ export default function Footer() {
           <div className="footer-nav-col">
             <h3>Tentang Kami</h3>
             <a href="#tentang">Visi & Misi</a>
-            <a href="#tentang">Profil UBP</a>
+            <Link href="/profil-ubp-cilegon">Profil UBP</Link>
+            <Link href="/praktik-tata-kelola">Praktik Tata Kelola (GCG)</Link>
             <a href="#tentang">Hubungi Kami</a>
             <a href="#">Karir</a>
           </div>
@@ -288,26 +289,33 @@ export default function Footer() {
         .proper-award {
           width: 150px;
           margin: 0;
-          padding: 0.5rem;
+          padding: 0.65rem 0.5rem;
           border-radius: 12px;
-          border: 1px solid rgba(250, 250, 250, 0.15);
-          background-color: rgba(250, 250, 250, 0.03);
+          border: 1px solid rgba(233, 213, 255, 0.5);
+          background-color: #e9d5ff;
           text-align: center;
+          transition: all 0.2s ease;
+        }
+
+        .proper-award:hover {
+          background-color: #f3e8ff;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .proper-award img {
           display: block;
           width: 100%;
           aspect-ratio: 2 / 1;
-          object-fit: cover;
-          border-radius: 8px;
+          object-fit: contain;
+          border-radius: 6px;
         }
 
         .proper-award figcaption {
           margin-top: 0.6rem;
-          color: #ffffff;
-          font-size: 0.7rem;
-          font-weight: 600;
+          color: #1e3f35;
+          font-size: 0.725rem;
+          font-weight: 700;
           line-height: 1.3;
           letter-spacing: 0.03em;
         }

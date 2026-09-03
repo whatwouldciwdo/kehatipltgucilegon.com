@@ -70,6 +70,7 @@ export default function VideoShowcaseSection({
         onMouseLeave={handleMouseLeave}
         onClick={openModal}
         aria-label="Video Profil PT PLN Indonesia Power UBP Cilegon"
+        data-reveal="fade"
       >
         {/* Background Video Layer - Runs continuously across entire height */}
         <div className="video-wrapper">

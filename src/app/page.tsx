@@ -6,7 +6,7 @@ import HeroAbstractBackground from '@/components/HeroAbstractBackground';
 import HeroContentOverlay from '@/components/HeroContentOverlay';
 import CommunityEditorialSection from '@/components/CommunityEditorialSection';
 
-import KehatiInitiatives from '@/components/KehatiInitiatives';
+import Report2026PreviewSection from '@/components/Report2026PreviewSection';
 import VideoShowcaseSection from '@/components/VideoShowcaseSection';
 import CollegeLifeShowcase from '@/components/CollegeLifeShowcase';
 import WelcomeStatementSection from '@/components/WelcomeStatementSection';
@@ -14,8 +14,14 @@ import CilegonLocationSection from '@/components/CilegonLocationSection';
 import ReportBanner from '@/components/ReportBanner';
 import Footer from '@/components/Footer';
 import IntroAnimation from '@/components/IntroAnimation';
+import { useScrollReveal } from '@/hooks/useScrollReveal';
 
 export default function Home() {
+  // Activate scroll-reveal for all [data-reveal] elements on the landing page.
+  // WelcomeStatementSection is intentionally excluded — it manages its own
+  // scroll-lock choreography and must not be affected by this hook.
+  useScrollReveal();
+
   return (
     <>
       {/* Header Navigation */}
@@ -37,17 +43,17 @@ export default function Home() {
         <section style={{ backgroundColor: '#ffffff', padding: '4rem 0', borderBottom: '1px solid var(--border-light)', position: 'relative', zIndex: 10 }}>
           <div className="container">
             <div className="metrics-container">
-              <div>
+              <div data-reveal="scale" data-reveal-delay="0">
                 <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--bg-dark-green)', lineHeight: 1.1 }}>740 MW</div>
                 <div style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.5rem' }}>Kapasitas Listrik Bersih</div>
               </div>
-              <div>
+              <div data-reveal="scale" data-reveal-delay="120">
                 <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--bg-dark-green)', lineHeight: 1.1 }}>PROPER Hijau</div>
                 <div style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.5rem' }}>Peringkat Kinerja KLHK</div>
               </div>
-              <div>
-                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--bg-dark-green)', lineHeight: 1.1 }}>1.5 Hektar</div>
-                <div style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.5rem' }}>Kawasan Hutan Kehati</div>
+              <div data-reveal="scale" data-reveal-delay="240">
+                <div style={{ fontSize: '2.5rem', fontWeight: 800, color: 'var(--bg-dark-green)', lineHeight: 1.1 }}>17.7 Hektar</div>
+                <div style={{ fontSize: '0.95rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.5rem' }}>Kawasan Konservasi Kehati</div>
               </div>
             </div>
           </div>
@@ -62,11 +68,11 @@ export default function Home() {
         {/* Section 2.5: Cilegon Geographic & Strategic Location Section */}
         <CilegonLocationSection />
 
-        {/* Section 3: Kehati Conservation initiatives */}
-        <KehatiInitiatives />
-
-        {/* Section 3.5: College Life Circular Showcase */}
+        {/* Section 3: College Life Circular Showcase (Kawasan & Inisiatif Kehati) */}
         <CollegeLifeShowcase />
+
+        {/* Section 3.5: 2026 Biodiversity Report Highlights (LAPORAN IMPLEMENTASI KEHATI 2026) */}
+        <Report2026PreviewSection />
 
         {/* Section 4: About UBP Cilegon (Environmental Policy) */}
         <section 
@@ -80,7 +86,7 @@ export default function Home() {
         >
           <div className="container">
             <div className="grid-2" style={{ gap: '4rem', alignItems: 'center' }}>
-              <div>
+              <div data-reveal="left">
                 <h2 
                   style={{
                     fontSize: 'clamp(1.7rem, 6vw, 2.5rem)',
@@ -99,7 +105,7 @@ export default function Home() {
                 </p>
               </div>
 
-              <div className="policy-card">
+              <div className="policy-card" data-reveal="right" data-reveal-delay="100">
                 <h3 style={{ fontSize: '1.4rem', color: 'var(--bg-dark-green)' }}>
                   Kebijakan Lingkungan & Keberlanjutan
                 </h3>
