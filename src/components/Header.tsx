@@ -72,10 +72,10 @@ export default function Header() {
         setIsCollapsed(false);
       }
 
-      // Stage 3: Hide navbar completely when scrolled close to the footer
+      // Stage 3: Hide navbar completely when scrolled close to the footer (desktop only)
       const scrollHeight = document.documentElement.scrollHeight;
       const clientHeight = document.documentElement.clientHeight;
-      if (y + clientHeight >= scrollHeight - 400) {
+      if (window.innerWidth > 992 && y + clientHeight >= scrollHeight - 400) {
         setIsNavbarHidden(true);
       } else {
         setIsNavbarHidden(false);
@@ -1369,30 +1369,62 @@ export default function Header() {
         /* Responsive adaptation */
         @media (max-width: 992px) {
           .header-wrapper {
-            top: 0;
-            left: 20px;
-            right: 20px;
-            padding: 1.5rem;
-            border-radius: 0 0 32px 32px;
-            max-height: 900px;
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: 0 0 16px 16px !important;
+            max-height: 72px !important;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            backdrop-filter: blur(12px) !important;
+            z-index: 1000 !important;
+            box-sizing: border-box !important;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
           }
           
           .header-collapsed {
-            top: 0;
-            left: 20px;
-            right: 20px;
-            padding: 0.75rem 1.25rem;
-            border-radius: 0 0 20px 20px;
-            max-height: none;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            width: 100% !important;
+            padding: 0.75rem 1.25rem !important;
+            border-radius: 0 0 16px 16px !important;
+            max-height: 72px !important;
           }
 
-          /* Menu Open State on Mobile */
+          /* Hide old desktop collapsible hero content on mobile entirely */
+          .collapsible-content {
+            display: none !important;
+          }
+
+          /* Keep navbar always fixed and visible on mobile */
+          .header-wrapper.navbar-hidden {
+            transform: none !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
+          }
+
+          /* Menu Open State on Mobile: Clean Fullscreen Drawer */
           .header-wrapper.menu-open-active {
-            height: calc(100vh - 20px) !important;
-            max-height: calc(100vh - 20px) !important;
-            border-radius: 0 0 32px 32px !important;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15) !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            bottom: 0 !important;
+            width: 100% !important;
+            height: 100dvh !important;
+            max-height: 100dvh !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            padding: 0.75rem 1.25rem 2.5rem 1.25rem !important;
+            overflow-y: auto !important;
+            background-color: #ffffff !important;
+            z-index: 1001 !important;
           }
 
           .menu-open-active .collapsible-content {
@@ -1400,7 +1432,7 @@ export default function Header() {
           }
 
           .hamburger-btn {
-            display: flex;
+            display: flex !important;
           }
 
           .nav-links {
@@ -1426,26 +1458,19 @@ export default function Header() {
 
         @media (max-width: 480px) {
           .header-wrapper {
-            left: 12px;
-            right: 12px;
-            padding: 1rem;
-            border-radius: 0 0 24px 24px;
+            padding: 0.65rem 0.9rem !important;
+            border-radius: 0 0 12px 12px !important;
+            max-height: 68px !important;
           }
           
           .header-collapsed {
-            left: 12px;
-            right: 12px;
-            padding: 0.6rem 0.8rem;
-            border-radius: 0 0 16px 16px;
-            max-height: none;
+            padding: 0.65rem 0.9rem !important;
+            border-radius: 0 0 12px 12px !important;
+            max-height: 68px !important;
           }
 
           .header-wrapper.menu-open-active {
-            left: 12px !important;
-            right: 12px !important;
-            height: calc(100vh - 24px) !important;
-            max-height: calc(100vh - 24px) !important;
-            border-radius: 0 0 24px 24px !important;
+            padding: 0.65rem 0.9rem 2.5rem 0.9rem !important;
           }
 
           .logo-title {

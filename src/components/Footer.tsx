@@ -372,10 +372,22 @@ export default function Footer() {
             gap: 1rem;
           }
           .footer-badges {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.65rem;
             width: 100%;
           }
           .proper-award {
-            width: calc(33.333% - 0.667rem);
+            width: 100%;
+            padding: 0.5rem 0.35rem;
+          }
+          .proper-award img {
+            height: 46px;
+            object-fit: contain;
+          }
+          .proper-award figcaption {
+            margin-top: 0.4rem;
+            font-size: 0.65rem;
           }
         }
 
@@ -392,10 +404,25 @@ export default function Footer() {
             height: 48px;
           }
           .footer-badges {
-            gap: 0.75rem;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.4rem;
+            width: 100%;
           }
           .proper-award {
             width: 100%;
+            padding: 0.35rem 0.2rem;
+            border-radius: 8px;
+          }
+          .proper-award img {
+            height: 36px;
+            object-fit: contain;
+          }
+          .proper-award figcaption {
+            margin-top: 0.3rem;
+            font-size: 0.55rem;
+            line-height: 1.2;
+            letter-spacing: 0.01em;
           }
         }
       `}</style>
