@@ -20,11 +20,11 @@ interface CollegeLifeShowcaseProps {
 
 const defaultKehatiItems: ShowcaseItem[] = [
   {
-    id: 'taman-kehati',
-    title: 'TAMAN KEHATI',
-    subtitle: 'Flora Endemik Banten 1.5 Ha',
+    id: 'wilayah-konservasi',
+    title: 'KONSERVASI FLORA & FAUNA',
+    subtitle: 'Wilayah Konservasi Sebesar 1,7 Ha',
     image: '/images/kehati-showcase/taman-kehati.jpg',
-    alt: 'Taman Kehati dan Konservasi Flora Endemik',
+    alt: 'Wilayah Konservasi Flora dan Fauna Sebesar 1,7 Ha',
     href: '#kehati',
   },
   {

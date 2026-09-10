@@ -105,7 +105,7 @@ export default function Header() {
       if (isHomePage) {
         gsap.fromTo(headerRef.current,
           { y: -200, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.2, ease: 'power4.out', delay: 6.0 }
+          { y: 0, opacity: 1, duration: 1.0, ease: 'power4.out', delay: 5.0 }
         );
       } else {
         gsap.fromTo(headerRef.current,
@@ -207,23 +207,6 @@ export default function Header() {
               </button>
             </div>
 
-            <div className="nav-item-group">
-              <Link 
-                href="/laporan"
-                className="nav-link-text"
-              >
-                {t('Laporan 2023-2026', 'Reports 2023-2026')}
-              </Link>
-            </div>
-
-            <div className="nav-item-group">
-              <Link 
-                href="/galeri"
-                className="nav-link-text"
-              >
-                {t('Galeri', 'Gallery')}
-              </Link>
-            </div>
 
             <div className="nav-item-group">
               <a 
@@ -458,7 +441,7 @@ export default function Header() {
 
         {/* Desktop Hero Main Content (Rendered only on Homepage) */}
         {isHomePage && (
-          <div className="collapsible-content" style={{ marginTop: isCollapsed ? '0' : '3.5rem' }}>
+          <div className="collapsible-content" style={{ marginTop: isCollapsed ? '0' : '1.75rem' }}>
             <div className="hero-split">
               {/* Left Column: Big Headline */}
               <div className="hero-left">
@@ -472,8 +455,8 @@ export default function Header() {
               <div className="hero-right">
                 <p className="hero-desc">
                   {t(
-                    'Pembangkit Listrik Tenaga Gas dan Uap (PLTGU) Cilegon hadir sebagai pelopor energi andal ramah lingkungan, bersinergi menjaga kelestarian keanekaragaman hayati menuju masa depan hijau.',
-                    'Cilegon Combined Cycle Power Plant (PLTGU) pioneers reliable and eco-friendly energy, harmoniously preserving biodiversity towards a sustainable green future.'
+                    'PLTGU Cilegon mempelopori energi andal ramah lingkungan dan kelestarian keanekaragaman hayati menuju masa depan hijau.',
+                    'PLTGU Cilegon pioneers clean reliable energy and biodiversity conservation towards a sustainable green future.'
                   )}
                 </p>
                 <a href="/#proper" className="btn-green">
@@ -500,10 +483,6 @@ export default function Header() {
                     <span>{t('Keanekaragaman Hayati', 'Biodiversity')}</span>
                     <span className="arrow-right">→</span>
                   </button>
-                  <Link href="/laporan" onClick={() => setIsMenuOpen(false)} className="mobile-nav-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span>{t('Laporan 2023-2026', 'Reports 2023-2026')}</span>
-                    <span className="arrow-right">→</span>
-                  </Link>
                   <button onClick={() => setMobileSubmenu('tentang')} className="mobile-nav-item">
                     <span>{t('Tentang Kami', 'About Us')}</span>
                     <span className="arrow-right">→</span>
@@ -642,14 +621,14 @@ export default function Header() {
           max-width: 1680px;
           margin: 0 auto;
           background-color: #ffffff;
-          border-radius: 0 0 40px 40px;
+          border-radius: 0 0 32px 32px;
           box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08);
           z-index: 100;
           opacity: 0;
           transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
           overflow: hidden;
           box-sizing: border-box;
-          padding: 2.5rem 3.5rem;
+          padding: 1.5rem 3rem;
           max-height: 900px;
           font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
           display: flex;
@@ -756,7 +735,7 @@ export default function Header() {
         /* Stage 2: Hero Content collapsible styling */
         .collapsible-content {
           opacity: 1;
-          max-height: 500px;
+          max-height: 400px;
           transition: opacity 0.35s ease, max-height 0.6s cubic-bezier(0.16, 1, 0.3, 1), margin-top 0.6s ease, padding 0.6s ease;
           overflow: hidden;
           order: 4;
@@ -1111,43 +1090,43 @@ export default function Header() {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          gap: 4rem;
+          gap: 2.5rem;
           flex-wrap: wrap;
           width: 100%;
         }
         .hero-left {
           flex: 1 1 50%;
-          min-width: 320px;
+          min-width: 280px;
         }
         .hero-right {
           flex: 1 1 35%;
-          min-width: 280px;
+          min-width: 260px;
           display: flex;
           flex-direction: column;
-          gap: 1.75rem;
+          gap: 1.1rem;
         }
         .hero-title {
-          font-size: clamp(2.2rem, 5vw, 4.2rem);
+          font-size: clamp(1.65rem, 3vw, 2.5rem);
           font-weight: 500;
           color: #111827;
           letter-spacing: -0.03em;
-          line-height: 1.1;
+          line-height: 1.15;
           margin: 0;
         }
         .hero-desc {
-          font-size: 1.05rem;
+          font-size: 0.95rem;
           color: #4b5563;
-          line-height: 1.6;
+          line-height: 1.55;
           margin: 0;
         }
         
         .btn-green {
           background-color: #1e3f35;
           color: #ffffff;
-          padding: 0.75rem 2rem;
+          padding: 0.6rem 1.6rem;
           border-radius: 50px;
           font-weight: 600;
-          font-size: 0.95rem;
+          font-size: 0.9rem;
           text-decoration: none;
           display: inline-block;
           transition: all 0.3s ease;

@@ -41,21 +41,21 @@ export default function IntroAnimation() {
       });
 
       /* Initial Sequence Timeline */
-      const initialTl = gsap.timeline({ delay: 0.5 });
+      const initialTl = gsap.timeline({ delay: 0.3 });
       initialTl.fromTo(initialSequenceRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
       );
       initialTl.to(initialSequenceRef.current, {
         opacity: 0,
-        duration: 0.6,
+        duration: 0.45,
         ease: 'power2.inOut'
-      }, '+=1.5');
+      }, '+=0.8');
 
       /* Main Timeline */
       const EASE = 'power3.inOut';
-      // Start main timeline after initial sequence finishes (0.5 + 0.8 + 1.5 + 0.6 = 3.4)
-      const tl = gsap.timeline({ delay: 3.4 });
+      // Start main timeline after initial sequence finishes (0.3 + 0.6 + 0.8 + 0.45 = 2.15)
+      const tl = gsap.timeline({ delay: 2.15 });
 
       // 1. Tiles reveal
       tl.to(tiles, {
@@ -64,30 +64,30 @@ export default function IntroAnimation() {
         rotation: 0,
         opacity: 1,
         scale: 0.82,
-        duration: 1.1,
-        stagger: 0.06,
+        duration: 0.8,
+        stagger: 0.05,
         ease: 'power3.out',
       });
 
       // 2. Small settle
       tl.to(tiles, {
         scale: 0.8,
-        duration: 0.35,
-        stagger: 0.04,
+        duration: 0.25,
+        stagger: 0.03,
         ease: 'power2.out',
-      }, '>-0.25');
+      }, '>-0.15');
 
-      // 3. Strip collapses
+      // 3. Strip collapses (hold 3 images briefly so they are clearly visible)
       tl.to(strip, {
         gap: '0.75vw',
-        duration: 1,
+        duration: 0.7,
         ease: EASE,
-      }, 1.5);
+      }, 1.2);
 
       // 4. Tiles scale to full size
       tl.to(tiles, {
         scale: 1,
-        duration: 1,
+        duration: 0.7,
         ease: EASE,
       }, '<');
 
@@ -95,29 +95,29 @@ export default function IntroAnimation() {
       const others = Array.from(tiles).filter((t) => t !== feature);
       tl.to(others, {
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-        duration: 1,
-        stagger: 0.1,
+        duration: 0.65,
+        stagger: 0.08,
         ease: EASE,
-      }, 2.5);
+      }, 1.9);
 
       // 6. Feature image scales up to fill the screen
       tl.to(feature, {
         scale: 15,
-        duration: 1.5,
+        duration: 1.0,
         ease: EASE,
-      }, 3.5);
+      }, 2.5);
 
       // 7. Dark veil lifts
       tl.to(veil, {
         clipPath: 'polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%)',
-        duration: 1,
+        duration: 0.75,
         ease: EASE,
-      }, 4.5);
+      }, 3.2);
 
       // 8. Fade out and hide preloader
       tl.to(containerRef.current, {
         opacity: 0,
-        duration: 0.8,
+        duration: 0.5,
         ease: 'power2.inOut',
         onComplete: () => {
           if (containerRef.current) {
@@ -126,7 +126,7 @@ export default function IntroAnimation() {
           // Re-enable scrolling
           document.body.style.overflow = '';
         }
-      }, '+=1.0'); // Hold the final frame for 1 second before fading out
+      }, '+=0.3');
 
     }, containerRef);
 

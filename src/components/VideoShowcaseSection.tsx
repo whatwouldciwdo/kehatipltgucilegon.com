@@ -311,7 +311,7 @@ export default function VideoShowcaseSection({
         /* Sound Toggle Control Button */
         .sound-toggle-btn {
           position: absolute;
-          bottom: 8rem;
+          bottom: 4.5rem;
           right: 2.5rem;
           z-index: 20;
           background: rgba(18, 44, 30, 0.85);
@@ -340,7 +340,7 @@ export default function VideoShowcaseSection({
         /* Transparent Bottom Running Marquee Strip - Video visible directly behind */
         .bottom-marquee-bar {
           width: 100%;
-          padding: 0.5rem 0 1rem 0;
+          padding: 0.35rem 0 0.6rem 0;
           background: transparent;
           border: none;
           overflow: hidden;
@@ -380,13 +380,15 @@ export default function VideoShowcaseSection({
 
         .marquee-item {
           font-family: var(--font-outfit), system-ui, -apple-system, sans-serif;
-          font-size: clamp(3.5rem, 7.5vw, 6.5rem);
-          font-weight: 500;
+          font-size: clamp(1.25rem, 2.2vw, 1.85rem);
+          font-weight: 600;
           color: #ffffff;
-          letter-spacing: -0.03em;
-          text-shadow: 0 4px 24px rgba(0, 0, 0, 0.8), 0 2px 6px rgba(0, 0, 0, 0.9);
-          padding-right: 3.5rem;
-          line-height: 1;
+          opacity: 0.88;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+          padding-right: 3rem;
+          line-height: 1.2;
           display: inline-block;
         }
 
