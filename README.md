@@ -16,6 +16,17 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## CMS dan Supabase
+
+1. Buat proyek di Supabase.
+2. Jalankan `supabase/migrations/202609280001_cms.sql` melalui SQL Editor.
+3. Salin `.env.example` menjadi `.env.local`, lalu isi Project URL dan Publishable Key.
+4. Buat pengguna melalui **Authentication > Users** di Supabase Dashboard.
+5. Salin UUID pengguna dan jalankan perintah yang dicontohkan di bagian akhir file migrasi untuk memberi role `admin` atau `editor`.
+6. Jalankan `npm run dev`, lalu buka [http://localhost:3000/cms/login](http://localhost:3000/cms/login).
+
+Jangan masukkan secret key atau password database ke variabel `NEXT_PUBLIC_*`. Akses data CMS dibatasi oleh Row Level Security di PostgreSQL.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

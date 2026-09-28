@@ -1,0 +1,2 @@
+import { ArticleForm } from '@/components/cms/ArticleForm';
+export default function NewArticlePage() { return <div className="cms-page"><header className="cms-page-header"><div><p className="cms-eyebrow">Naskah baru</p><h1>Tulis artikel</h1><p>Isi naskah dan pilih status publikasinya.</p></div></header><ArticleForm /></div>; }

@@ -1,0 +1,88 @@
+'use server';
+
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { requireCmsUser } from '@/lib/cms-auth';
+import { createClient } from '@/lib/supabase/server';
+
+export type FormState = { error?: string };
+
+function text(formData: FormData, key: string) {
+  return String(formData.get(key) ?? '').trim();
+}
+
+function validSlug(value: string) {
+  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
+}
+
+export async function login(_: FormState, formData: FormData): Promise<FormState> {
+  const email = text(formData, 'email');
+  const password = text(formData, 'password');
+  if (!email || !password) return { error: 'Email dan kata sandi wajib diisi.' };
+
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) return { error: 'Email atau kata sandi tidak sesuai.' };
+
+  const { data: user } = await supabase.auth.getUser();
+  const { data: profile } = await supabase.from('profiles').select('id').eq('id', user.user?.id ?? '').maybeSingle();
+  if (!profile) {
+    await supabase.auth.signOut();
+    return { error: 'Akun ini belum memiliki akses CMS.' };
+  }
+  redirect('/cms');
+}
+
+export async function logout() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect('/cms/login');
+}
+
+function articlePayload(formData: FormData) {
+  const title = text(formData, 'title');
+  const slug = text(formData, 'slug').toLowerCase();
+  const excerpt = text(formData, 'excerpt');
+  const body = text(formData, 'body');
+  const status = text(formData, 'status') === 'published' ? 'published' : 'draft';
+  if (title.length < 3 || title.length > 160) return { error: 'Judul harus terdiri dari 3 sampai 160 karakter.' };
+  if (!validSlug(slug)) return { error: 'Slug hanya boleh berisi huruf kecil, angka, dan tanda hubung.' };
+  if (excerpt.length > 320) return { error: 'Ringkasan maksimal 320 karakter.' };
+  return { data: { title, slug, excerpt, body, status } };
+}
+
+export async function createArticle(_: FormState, formData: FormData): Promise<FormState> {
+  const { supabase, profile } = await requireCmsUser();
+  const payload = articlePayload(formData);
+  if ('error' in payload) return { error: payload.error };
+  const publishedAt = payload.data.status === 'published' ? new Date().toISOString() : null;
+  const { error } = await supabase.from('articles').insert({ ...payload.data, author_id: profile.id, published_at: publishedAt });
+  if (error?.code === '23505') return { error: 'Slug sudah dipakai artikel lain.' };
+  if (error) return { error: 'Artikel gagal disimpan. Periksa koneksi dan coba lagi.' };
+  revalidatePath('/cms');
+  revalidatePath('/cms/articles');
+  redirect('/cms/articles?success=created');
+}
+
+export async function updateArticle(_: FormState, formData: FormData): Promise<FormState> {
+  const { supabase } = await requireCmsUser();
+  const id = text(formData, 'id');
+  const payload = articlePayload(formData);
+  if (!id) return { error: 'ID artikel tidak ditemukan.' };
+  if ('error' in payload) return { error: payload.error };
+  const publishedAt = payload.data.status === 'published' ? new Date().toISOString() : null;
+  const { error } = await supabase.from('articles').update({ ...payload.data, published_at: publishedAt }).eq('id', id);
+  if (error?.code === '23505') return { error: 'Slug sudah dipakai artikel lain.' };
+  if (error) return { error: 'Perubahan gagal disimpan atau akses ditolak.' };
+  revalidatePath('/cms');
+  revalidatePath('/cms/articles');
+  redirect('/cms/articles?success=updated');
+}
+
+export async function deleteArticle(formData: FormData) {
+  const { supabase } = await requireCmsUser();
+  const id = text(formData, 'id');
+  if (id) await supabase.from('articles').delete().eq('id', id);
+  revalidatePath('/cms');
+  revalidatePath('/cms/articles');
+}
