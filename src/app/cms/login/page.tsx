@@ -5,6 +5,7 @@ import { LoginForm } from '@/components/cms/LoginForm';
 import { getCmsSession } from '@/lib/cms-session';
 import '../cms.css';
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Masuk CMS | Kehati UBP Cilegon' };
 
 export default async function LoginPage() {

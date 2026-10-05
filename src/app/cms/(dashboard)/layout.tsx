@@ -6,6 +6,7 @@ import { logout } from '../actions';
 import { requireCmsUser } from '@/lib/cms-auth';
 import '../cms.css';
 
+export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'CMS Kehati UBP Cilegon', robots: { index: false, follow: false } };
 
 export default async function CmsLayout({ children }: { children: React.ReactNode }) {
