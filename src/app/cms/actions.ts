@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { requireCmsUser } from '@/lib/cms-auth';
-import { createClient } from '@/lib/supabase/server';
+import { createCmsSession, deleteCmsSession, verifyLocalCredentials } from '@/lib/cms-session';
 
 export type FormState = { error?: string };
 
@@ -16,26 +16,16 @@ function validSlug(value: string) {
 }
 
 export async function login(_: FormState, formData: FormData): Promise<FormState> {
-  const email = text(formData, 'email');
-  const password = text(formData, 'password');
-  if (!email || !password) return { error: 'Email dan kata sandi wajib diisi.' };
-
-  const supabase = await createClient();
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { error: 'Email atau kata sandi tidak sesuai.' };
-
-  const { data: user } = await supabase.auth.getUser();
-  const { data: profile } = await supabase.from('profiles').select('id').eq('id', user.user?.id ?? '').maybeSingle();
-  if (!profile) {
-    await supabase.auth.signOut();
-    return { error: 'Akun ini belum memiliki akses CMS.' };
-  }
+  const username = text(formData, 'username');
+  const password = String(formData.get('password') ?? '');
+  if (!username || !password) return { error: 'Nama pengguna dan kata sandi wajib diisi.' };
+  if (!(await verifyLocalCredentials(username, password))) return { error: 'Nama pengguna atau kata sandi tidak sesuai.' };
+  await createCmsSession(username);
   redirect('/cms');
 }
 
 export async function logout() {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
+  await deleteCmsSession();
   redirect('/cms/login');
 }
 
@@ -52,11 +42,11 @@ function articlePayload(formData: FormData) {
 }
 
 export async function createArticle(_: FormState, formData: FormData): Promise<FormState> {
-  const { supabase, profile } = await requireCmsUser();
+  const { supabase } = await requireCmsUser();
   const payload = articlePayload(formData);
   if ('error' in payload) return { error: payload.error };
   const publishedAt = payload.data.status === 'published' ? new Date().toISOString() : null;
-  const { error } = await supabase.from('articles').insert({ ...payload.data, author_id: profile.id, published_at: publishedAt });
+  const { error } = await supabase.from('articles').insert({ ...payload.data, author_id: null, published_at: publishedAt });
   if (error?.code === '23505') return { error: 'Slug sudah dipakai artikel lain.' };
   if (error) return { error: 'Artikel gagal disimpan. Periksa koneksi dan coba lagi.' };
   revalidatePath('/cms');

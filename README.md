@@ -19,13 +19,13 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 ## CMS dan Supabase
 
 1. Buat proyek di Supabase.
-2. Jalankan `supabase/migrations/202609280001_cms.sql` melalui SQL Editor.
-3. Salin `.env.example` menjadi `.env.local`, lalu isi Project URL dan Publishable Key.
-4. Buat pengguna melalui **Authentication > Users** di Supabase Dashboard.
-5. Salin UUID pengguna dan jalankan perintah yang dicontohkan di bagian akhir file migrasi untuk memberi role `admin` atau `editor`.
-6. Jalankan `npm run dev`, lalu buka [http://localhost:3000/cms/login](http://localhost:3000/cms/login).
+2. Jalankan `supabase/migrations/202609280001_cms.sql`, lalu `supabase/migrations/202609280002_local_cms_account.sql` melalui SQL Editor.
+3. Salin `.env.example` menjadi `.env.local`. Isi Project URL, Publishable Key, dan `SUPABASE_SERVICE_ROLE_KEY` dari **Project Settings > API**.
+4. Tentukan `CMS_USERNAME`, kemudian buat hash kata sandi dengan `npm run cms:hash-password -- "kata-sandi-minimal-12-karakter"`. Salin hasilnya ke `CMS_PASSWORD_HASH`.
+5. Isi `CMS_SESSION_SECRET` dengan nilai acak minimal 32 karakter. Contoh generator: `openssl rand -base64 48`.
+6. Jalankan `npm run dev`, lalu buka [http://localhost:3000/cms/login](http://localhost:3000/cms/login) dan masuk dengan `CMS_USERNAME` serta kata sandi asli yang di-hash pada langkah 4.
 
-Jangan masukkan secret key atau password database ke variabel `NEXT_PUBLIC_*`. Akses data CMS dibatasi oleh Row Level Security di PostgreSQL.
+CMS memakai akun lokal dari environment, bukan Supabase Auth. `SUPABASE_SERVICE_ROLE_KEY`, hash kata sandi, dan secret sesi hanya boleh disimpan di environment server tanpa prefix `NEXT_PUBLIC_`. Operasi CMS memakai service-role setelah validasi cookie sesi lokal, sehingga operasi server tersebut melewati RLS. Kebijakan RLS publik tetap membatasi pembacaan anonim ke artikel yang sudah terbit.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 

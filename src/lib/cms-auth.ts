@@ -1,26 +1,13 @@
 import 'server-only';
 import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
-
-export type CmsProfile = {
-  id: string;
-  full_name: string | null;
-  role: 'admin' | 'editor';
-};
+import { getCmsSession } from '@/lib/cms-session';
+import { createAdminClient } from '@/lib/supabase/admin';
 
 export async function requireCmsUser() {
-  const supabase = await createClient();
-  const { data, error } = await supabase.auth.getClaims();
-  const userId = data?.claims?.sub;
-
-  if (error || !userId) redirect('/cms/login');
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('id, full_name, role')
-    .eq('id', userId)
-    .single<CmsProfile>();
-
-  if (!profile) redirect('/cms/login?error=access');
-  return { supabase, profile, email: String(data.claims.email ?? '') };
+  const session = await getCmsSession();
+  if (!session) redirect('/cms/login');
+  return {
+    supabase: createAdminClient(),
+    profile: { full_name: session.username, role: 'admin' as const },
+  };
 }
