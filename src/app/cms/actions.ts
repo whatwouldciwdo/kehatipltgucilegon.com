@@ -15,12 +15,31 @@ function validSlug(value: string) {
   return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value);
 }
 
+function isRedirectError(err: unknown): boolean {
+  return Boolean(
+    err &&
+    typeof err === 'object' &&
+    'digest' in err &&
+    typeof (err as { digest?: unknown }).digest === 'string' &&
+    (err as { digest: string }).digest.startsWith('NEXT_REDIRECT')
+  );
+}
+
 export async function login(_: FormState, formData: FormData): Promise<FormState> {
   const username = text(formData, 'username');
   const password = String(formData.get('password') ?? '');
   if (!username || !password) return { error: 'Nama pengguna dan kata sandi wajib diisi.' };
-  if (!(await verifyLocalCredentials(username, password))) return { error: 'Nama pengguna atau kata sandi tidak sesuai.' };
-  await createCmsSession(username);
+
+  try {
+    const isValid = await verifyLocalCredentials(username, password);
+    if (!isValid) return { error: 'Nama pengguna atau kata sandi tidak sesuai.' };
+    await createCmsSession(username);
+  } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
+    console.error('CMS Login Error:', err);
+    return { error: err instanceof Error ? err.message : 'Terjadi kesalahan sistem saat memproses login.' };
+  }
+
   redirect('/cms');
 }
 
@@ -42,37 +61,54 @@ function articlePayload(formData: FormData) {
 }
 
 export async function createArticle(_: FormState, formData: FormData): Promise<FormState> {
-  const { supabase } = await requireCmsUser();
-  const payload = articlePayload(formData);
-  if ('error' in payload) return { error: payload.error };
-  const publishedAt = payload.data.status === 'published' ? new Date().toISOString() : null;
-  const { error } = await supabase.from('articles').insert({ ...payload.data, author_id: null, published_at: publishedAt });
-  if (error?.code === '23505') return { error: 'Slug sudah dipakai artikel lain.' };
-  if (error) return { error: 'Artikel gagal disimpan. Periksa koneksi dan coba lagi.' };
-  revalidatePath('/cms');
-  revalidatePath('/cms/articles');
+  try {
+    const { supabase } = await requireCmsUser();
+    const payload = articlePayload(formData);
+    if ('error' in payload) return { error: payload.error };
+    const publishedAt = payload.data.status === 'published' ? new Date().toISOString() : null;
+    const { error } = await supabase.from('articles').insert({ ...payload.data, author_id: null, published_at: publishedAt });
+    if (error?.code === '23505') return { error: 'Slug sudah dipakai artikel lain.' };
+    if (error) return { error: `Artikel gagal disimpan: ${error.message}` };
+    revalidatePath('/cms');
+    revalidatePath('/cms/articles');
+  } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
+    return { error: err instanceof Error ? err.message : 'Gagal membuat artikel.' };
+  }
+
   redirect('/cms/articles?success=created');
 }
 
 export async function updateArticle(_: FormState, formData: FormData): Promise<FormState> {
-  const { supabase } = await requireCmsUser();
-  const id = text(formData, 'id');
-  const payload = articlePayload(formData);
-  if (!id) return { error: 'ID artikel tidak ditemukan.' };
-  if ('error' in payload) return { error: payload.error };
-  const publishedAt = payload.data.status === 'published' ? new Date().toISOString() : null;
-  const { error } = await supabase.from('articles').update({ ...payload.data, published_at: publishedAt }).eq('id', id);
-  if (error?.code === '23505') return { error: 'Slug sudah dipakai artikel lain.' };
-  if (error) return { error: 'Perubahan gagal disimpan atau akses ditolak.' };
-  revalidatePath('/cms');
-  revalidatePath('/cms/articles');
+  try {
+    const { supabase } = await requireCmsUser();
+    const id = text(formData, 'id');
+    const payload = articlePayload(formData);
+    if (!id) return { error: 'ID artikel tidak ditemukan.' };
+    if ('error' in payload) return { error: payload.error };
+    const publishedAt = payload.data.status === 'published' ? new Date().toISOString() : null;
+    const { error } = await supabase.from('articles').update({ ...payload.data, published_at: publishedAt }).eq('id', id);
+    if (error?.code === '23505') return { error: 'Slug sudah dipakai artikel lain.' };
+    if (error) return { error: `Perubahan gagal disimpan: ${error.message}` };
+    revalidatePath('/cms');
+    revalidatePath('/cms/articles');
+  } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
+    return { error: err instanceof Error ? err.message : 'Gagal memperbarui artikel.' };
+  }
+
   redirect('/cms/articles?success=updated');
 }
 
 export async function deleteArticle(formData: FormData) {
-  const { supabase } = await requireCmsUser();
-  const id = text(formData, 'id');
-  if (id) await supabase.from('articles').delete().eq('id', id);
-  revalidatePath('/cms');
-  revalidatePath('/cms/articles');
+  try {
+    const { supabase } = await requireCmsUser();
+    const id = text(formData, 'id');
+    if (id) await supabase.from('articles').delete().eq('id', id);
+    revalidatePath('/cms');
+    revalidatePath('/cms/articles');
+  } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
+    console.error('Delete article error:', err);
+  }
 }
