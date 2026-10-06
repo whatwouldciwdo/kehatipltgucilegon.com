@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, FilePenLine, FileText, Send, AlertTriangle } from 'lucide-react';
+import { ArrowRight, FileEdit, Files, CheckCircle2, AlertTriangle, FilePlus2, Sparkles, Plus } from 'lucide-react';
 import { requireCmsUser } from '@/lib/cms-auth';
 
 type RecentArticle = {
@@ -42,12 +42,12 @@ export default async function CmsDashboard() {
     <div className="cms-page">
       <header className="cms-page-header">
         <div>
-          <p className="cms-eyebrow">Ringkasan konten</p>
+          <p className="cms-eyebrow">Ruang Pengelola</p>
           <h1>Selamat bekerja, {profile.full_name?.split(' ')[0] || 'Pengelola'}.</h1>
           <p>Periksa draf dan terbitkan pembaruan situs dari satu tempat.</p>
         </div>
         <Link className="cms-button cms-button-primary" href="/cms/articles/new">
-          Tulis artikel
+          <Plus size={18} /> Tulis artikel
         </Link>
       </header>
 
@@ -63,16 +63,33 @@ export default async function CmsDashboard() {
 
       <section className="cms-stats" aria-label="Statistik artikel">
         <article className="cms-stat cms-raised">
-          <span className="cms-stat-icon"><FileText size={21} /></span>
-          <span><strong>{total}</strong><small>Semua artikel</small></span>
+          <span className="cms-stat-icon icon-emerald">
+            <Files size={22} strokeWidth={2} />
+          </span>
+          <span>
+            <strong>{total}</strong>
+            <small>Semua artikel</small>
+          </span>
         </article>
+
         <article className="cms-stat cms-raised">
-          <span className="cms-stat-icon"><FilePenLine size={21} /></span>
-          <span><strong>{drafts}</strong><small>Masih draf</small></span>
+          <span className="cms-stat-icon icon-amber">
+            <FileEdit size={22} strokeWidth={2} />
+          </span>
+          <span>
+            <strong>{drafts}</strong>
+            <small>Masih draf</small>
+          </span>
         </article>
+
         <article className="cms-stat cms-raised">
-          <span className="cms-stat-icon"><Send size={21} /></span>
-          <span><strong>{published}</strong><small>Sudah terbit</small></span>
+          <span className="cms-stat-icon icon-sky">
+            <CheckCircle2 size={22} strokeWidth={2} />
+          </span>
+          <span>
+            <strong>{published}</strong>
+            <small>Sudah terbit</small>
+          </span>
         </article>
       </section>
 
@@ -84,12 +101,17 @@ export default async function CmsDashboard() {
           </div>
           <Link href="/cms/articles">Lihat semua <ArrowRight size={17} /></Link>
         </div>
+
         {!recent?.length ? (
           <div className="cms-empty">
-            <FileText size={30} />
+            <div className="cms-empty-icon-wrap">
+              <FilePlus2 size={34} strokeWidth={1.8} />
+            </div>
             <h3>Belum ada artikel</h3>
-            <p>Tulis artikel pertama untuk mulai mengisi CMS.</p>
-            <Link className="cms-button cms-button-primary" href="/cms/articles/new">Tulis artikel pertama</Link>
+            <p>Tulis naskah pertama Anda untuk mulai mempublikasikan konten di situs Kehati.</p>
+            <Link className="cms-button cms-button-primary" href="/cms/articles/new">
+              <Plus size={18} /> Tulis artikel pertama
+            </Link>
           </div>
         ) : (
           <div className="cms-list">
@@ -100,6 +122,7 @@ export default async function CmsDashboard() {
                   <small>Diperbarui {new Intl.DateTimeFormat('id-ID', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(item.updated_at))}</small>
                 </span>
                 <span className={`cms-status cms-status-${item.status}`}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: item.status === 'published' ? '#16a34a' : '#d97706' }} />
                   {item.status === 'published' ? 'Terbit' : 'Draf'}
                 </span>
               </Link>
