@@ -25,6 +25,9 @@ function isRedirectError(err: unknown): boolean {
   );
 }
 
+// ==========================================
+// AUTH ACTIONS
+// ==========================================
 export async function login(_: FormState, formData: FormData): Promise<FormState> {
   const username = text(formData, 'username');
   const password = String(formData.get('password') ?? '');
@@ -48,6 +51,9 @@ export async function logout() {
   redirect('/cms/login');
 }
 
+// ==========================================
+// ARTICLE ACTIONS
+// ==========================================
 function articlePayload(formData: FormData) {
   const title = text(formData, 'title');
   const slug = text(formData, 'slug').toLowerCase();
@@ -110,5 +116,127 @@ export async function deleteArticle(formData: FormData) {
   } catch (err: unknown) {
     if (isRedirectError(err)) throw err;
     console.error('Delete article error:', err);
+  }
+}
+
+// ==========================================
+// GALLERY & ASSET ACTIONS
+// ==========================================
+function parseDetailImages(raw: string): string[] {
+  return raw
+    .split(/[\n,]/)
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0);
+}
+
+function galleryPayload(formData: FormData) {
+  const name = text(formData, 'name');
+  const category = text(formData, 'category');
+  const category_key = text(formData, 'category_key') || 'flora';
+  const location = text(formData, 'location');
+  const badge = text(formData, 'badge');
+  const description = text(formData, 'description');
+  const cover_image = text(formData, 'cover_image');
+  const detailImagesRaw = text(formData, 'detail_images');
+  const stats = text(formData, 'stats');
+  const sort_order = parseInt(text(formData, 'sort_order') || '0', 10);
+
+  if (name.length < 2) return { error: 'Nama/Judul aset foto wajib diisi.' };
+  if (!cover_image) return { error: 'URL atau path foto sampul wajib diisi.' };
+  if (!description) return { error: 'Deskripsi aset foto wajib diisi.' };
+
+  const detail_images = parseDetailImages(detailImagesRaw);
+  if (detail_images.length === 0) {
+    detail_images.push(cover_image);
+  }
+
+  return {
+    data: {
+      name,
+      category: category || 'Flora & Lanskap',
+      category_key,
+      location: location || 'Kawasan PLTGU Cilegon',
+      badge: badge || 'Konservasi',
+      description,
+      cover_image,
+      detail_images,
+      stats: stats || null,
+      sort_order: isNaN(sort_order) ? 0 : sort_order,
+    }
+  };
+}
+
+export async function createGalleryItem(_: FormState, formData: FormData): Promise<FormState> {
+  try {
+    const { supabase } = await requireCmsUser();
+    const payload = galleryPayload(formData);
+    if ('error' in payload) return { error: payload.error };
+
+    const customId = text(formData, 'id') || `item-${Date.now()}`;
+
+    const { error } = await supabase.from('kehati_gallery_items').insert({
+      id: customId,
+      ...payload.data
+    });
+
+    if (error) return { error: `Gagal menyimpan aset galeri: ${error.message}` };
+
+    revalidatePath('/galeri');
+    revalidatePath('/gallery');
+    revalidatePath('/cms');
+    revalidatePath('/cms/gallery');
+  } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
+    return { error: err instanceof Error ? err.message : 'Gagal membuat aset galeri.' };
+  }
+
+  redirect('/cms/gallery?success=created');
+}
+
+export async function updateGalleryItem(_: FormState, formData: FormData): Promise<FormState> {
+  try {
+    const { supabase } = await requireCmsUser();
+    const id = text(formData, 'id');
+    if (!id) return { error: 'ID aset galeri tidak ditemukan.' };
+
+    const payload = galleryPayload(formData);
+    if ('error' in payload) return { error: payload.error };
+
+    const { error } = await supabase
+      .from('kehati_gallery_items')
+      .update({
+        ...payload.data,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', id);
+
+    if (error) return { error: `Gagal memperbarui aset galeri: ${error.message}` };
+
+    revalidatePath('/galeri');
+    revalidatePath('/gallery');
+    revalidatePath('/cms');
+    revalidatePath('/cms/gallery');
+  } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
+    return { error: err instanceof Error ? err.message : 'Gagal memperbarui aset galeri.' };
+  }
+
+  redirect('/cms/gallery?success=updated');
+}
+
+export async function deleteGalleryItem(formData: FormData) {
+  try {
+    const { supabase } = await requireCmsUser();
+    const id = text(formData, 'id');
+    if (id) {
+      await supabase.from('kehati_gallery_items').delete().eq('id', id);
+    }
+    revalidatePath('/galeri');
+    revalidatePath('/gallery');
+    revalidatePath('/cms');
+    revalidatePath('/cms/gallery');
+  } catch (err: unknown) {
+    if (isRedirectError(err)) throw err;
+    console.error('Delete gallery item error:', err);
   }
 }

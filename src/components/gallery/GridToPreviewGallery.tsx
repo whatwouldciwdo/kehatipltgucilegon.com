@@ -172,8 +172,9 @@ const defaultGalleryItems: GalleryItem[] = [
   },
 ];
 
-export default function GridToPreviewGallery() {
+export default function GridToPreviewGallery({ initialItems }: { initialItems?: GalleryItem[] }) {
   const { t } = useLanguage();
+  const allItems = initialItems && initialItems.length > 0 ? initialItems : defaultGalleryItems;
   const [activeCategory, setActiveCategory] = useState<'all' | 'flora' | 'fauna' | 'mangrove' | 'inovasi'>('all');
   const [modalItem, setModalItem] = useState<GalleryItem | null>(null);
   const [modalActiveImgIdx, setModalActiveImgIdx] = useState(0);
@@ -191,14 +192,16 @@ export default function GridToPreviewGallery() {
   const leftGalleryLoopRef = useRef<gsap.core.Timeline | null>(null);
   const rightGalleryLoopRef = useRef<gsap.core.Timeline | null>(null);
 
-  const filteredItems = defaultGalleryItems;
+  const filteredItems = activeCategory === 'all' 
+    ? allItems 
+    : allItems.filter((item) => item.categoryKey === activeCategory);
 
   const categories = [
-    { key: 'all', label: t('Semua Koleksi', 'All Collection'), icon: <Sparkles size={16} />, count: 8 },
-    { key: 'flora', label: t('Flora & Taman Kehati', 'Flora & Kehati Park'), icon: <Leaf size={16} />, count: 3 },
-    { key: 'fauna', label: t('Fauna & Biowing', 'Fauna & Biowing'), icon: <Bird size={16} />, count: 1 },
-    { key: 'mangrove', label: t('Restorasi Mangrove', 'Mangrove Restoration'), icon: <Waves size={16} />, count: 1 },
-    { key: 'inovasi', label: t('Inovasi & Kawasan', 'Innovation & Facility'), icon: <Cpu size={16} />, count: 3 },
+    { key: 'all', label: t('Semua Koleksi', 'All Collection'), icon: <Sparkles size={16} />, count: allItems.length },
+    { key: 'flora', label: t('Flora & Taman Kehati', 'Flora & Kehati Park'), icon: <Leaf size={16} />, count: allItems.filter((i) => i.categoryKey === 'flora').length },
+    { key: 'fauna', label: t('Fauna & Biowing', 'Fauna & Biowing'), icon: <Bird size={16} />, count: allItems.filter((i) => i.categoryKey === 'fauna').length },
+    { key: 'mangrove', label: t('Restorasi Mangrove', 'Mangrove Restoration'), icon: <Waves size={16} />, count: allItems.filter((i) => i.categoryKey === 'mangrove').length },
+    { key: 'inovasi', label: t('Inovasi & Kawasan', 'Innovation & Facility'), icon: <Cpu size={16} />, count: allItems.filter((i) => i.categoryKey === 'inovasi').length },
   ];
 
   // Helper to build timeline for a preview controller
