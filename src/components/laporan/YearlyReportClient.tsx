@@ -18,13 +18,15 @@ import { REPORTS_DATA, ReportYearData } from '@/data/kehati-data';
 
 interface YearlyReportClientProps {
   yearNum: number;
+  initialReportData?: ReportYearData;
+  initialPrevReportData?: ReportYearData;
 }
 
-export default function YearlyReportClient({ yearNum }: YearlyReportClientProps) {
+export default function YearlyReportClient({ yearNum, initialReportData, initialPrevReportData }: YearlyReportClientProps) {
   const { t } = useLanguage();
 
-  const reportData: ReportYearData | undefined = REPORTS_DATA[yearNum];
-  const prevReportData: ReportYearData | undefined = REPORTS_DATA[yearNum - 1];
+  const reportData: ReportYearData | undefined = initialReportData || REPORTS_DATA[yearNum];
+  const prevReportData: ReportYearData | undefined = initialPrevReportData || REPORTS_DATA[yearNum - 1];
 
   if (!reportData) {
     notFound();
