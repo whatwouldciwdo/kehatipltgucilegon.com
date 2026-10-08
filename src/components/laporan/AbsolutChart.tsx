@@ -15,6 +15,9 @@ export default function AbsolutChart({ programs, year }: AbsolutChartProps) {
   const { t } = useLanguage();
   const [chartType, setChartType] = useState<'line' | 'bar'>('bar');
 
+  const getProgramChartLabel = (program: ProgramSummary) =>
+    `${t(program.nameId, program.nameEn)} (${t(program.unitId, program.unitEn)})`;
+
   // Extract year history keys available
   const allYears = Array.from(
     new Set(programs.flatMap((p) => Object.keys(p.history)))
@@ -104,7 +107,7 @@ export default function AbsolutChart({ programs, year }: AbsolutChartProps) {
                 <Bar 
                   key={prog.id} 
                   dataKey={prog.id} 
-                  name={t(prog.nameId, prog.nameEn)} 
+                  name={getProgramChartLabel(prog)}
                   fill={programColors[prog.id] || '#2d6a4f'} 
                   radius={[6, 6, 0, 0]} 
                 />
@@ -129,7 +132,7 @@ export default function AbsolutChart({ programs, year }: AbsolutChartProps) {
                   key={prog.id} 
                   type="monotone" 
                   dataKey={prog.id} 
-                  name={t(prog.nameId, prog.nameEn)} 
+                  name={getProgramChartLabel(prog)}
                   stroke={programColors[prog.id] || '#2d6a4f'} 
                   strokeWidth={3}
                   dot={{ r: 5 }}

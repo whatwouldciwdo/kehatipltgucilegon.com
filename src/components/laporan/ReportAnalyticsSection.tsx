@@ -28,7 +28,7 @@ import {
   Table as TableIcon
 } from 'lucide-react';
 import { useLanguage } from '@/context/LanguageContext';
-import { ReportYearData, ProgramSummary } from '@/data/kehati-data';
+import { ReportYearData } from '@/data/kehati-data';
 
 interface ReportAnalyticsSectionProps {
   reportData: ReportYearData;
@@ -39,6 +39,9 @@ export default function ReportAnalyticsSection({ reportData, year }: ReportAnaly
   const { t } = useLanguage();
   const [activeTab, setActiveTab] = useState<'status' | 'absolut' | 'diversity' | 'budget'>('absolut');
   const [chartType, setChartType] = useState<'bar' | 'line'>('bar');
+
+  const getProgramChartLabel = (program: ReportYearData['programs'][number]) =>
+    `${t(program.nameId, program.nameEn)} (${t(program.unitId, program.unitEn)})`;
 
   // Program color mapping
   const programColors: Record<string, string> = {
@@ -220,7 +223,7 @@ export default function ReportAnalyticsSection({ reportData, year }: ReportAnaly
                     <Bar 
                       key={prog.id} 
                       dataKey={prog.id} 
-                      name={t(prog.nameId, prog.nameEn)} 
+                      name={getProgramChartLabel(prog)}
                       fill={programColors[prog.id] || '#2d6a4f'} 
                       radius={[6, 6, 0, 0]} 
                     />
@@ -245,7 +248,7 @@ export default function ReportAnalyticsSection({ reportData, year }: ReportAnaly
                       key={prog.id} 
                       type="monotone" 
                       dataKey={prog.id} 
-                      name={t(prog.nameId, prog.nameEn)} 
+                      name={getProgramChartLabel(prog)}
                       stroke={programColors[prog.id] || '#2d6a4f'} 
                       strokeWidth={3}
                       dot={{ r: 5 }}
