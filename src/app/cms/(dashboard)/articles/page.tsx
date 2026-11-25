@@ -3,9 +3,18 @@ import { FileText, Pencil, Plus, Trash2, FilePlus2, CheckCircle2 } from 'lucide-
 import { deleteArticle } from '../../actions';
 import { requireCmsUser } from '@/lib/cms-auth';
 
+type ArticleListItem = {
+  id: string;
+  title: string;
+  slug: string;
+  status: string;
+  updated_at: string;
+};
+
 export default async function ArticlesPage({ searchParams }: { searchParams: Promise<{ success?: string }> }) {
   const { supabase } = await requireCmsUser();
-  const { data: articles } = await supabase.from('articles').select('id,title,slug,status,updated_at').order('updated_at', { ascending: false });
+  const { data } = await supabase.from('articles').select('id,title,slug,status,updated_at').order('updated_at', { ascending: false });
+  const articles = (data as ArticleListItem[] | null) ?? [];
   const query = await searchParams;
 
   return (

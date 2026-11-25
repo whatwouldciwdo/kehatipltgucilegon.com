@@ -1,36 +1,24 @@
-import { createClient } from '@supabase/supabase-js';
-import { 
-  YOY_CHART_DATA as defaultYoyData, 
+import { getOptionalPool } from '@/lib/db';
+import {
+  YOY_CHART_DATA as defaultYoyData,
   REPORTS_DATA as defaultReportsData,
   ReportYearData,
   ProgramSummary,
-  SpeciesItem
+  SpeciesItem,
 } from '@/data/kehati-data';
 
-function getSupabaseClient() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim().replace(/^["']|["']$/g, '');
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim().replace(/^["']|["']$/g, '') 
-    || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim().replace(/^["']|["']$/g, '');
-
-  if (!url || !key) return null;
-  return createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
-  });
-}
-
 export async function getYoyChartData() {
-  const supabase = getSupabaseClient();
-  if (!supabase) return defaultYoyData;
+  const pool = getOptionalPool();
+  if (!pool) return defaultYoyData;
 
   try {
-    const { data, error } = await supabase
-      .from('kehati_yoy_indicators')
-      .select('*')
-      .order('year', { ascending: true });
+    const { rows } = await pool.query(
+      'SELECT * FROM public.kehati_yoy_indicators ORDER BY year ASC'
+    );
 
-    if (error || !data || data.length === 0) return defaultYoyData;
+    if (!rows || rows.length === 0) return defaultYoyData;
 
-    return data.map((row) => ({
+    return rows.map((row) => ({
       year: String(row.year),
       flora: row.flora,
       fauna: row.fauna,
@@ -46,42 +34,41 @@ export async function getYoyChartData() {
 }
 
 export async function getReportByYear(year: number): Promise<ReportYearData | null> {
-  const supabase = getSupabaseClient();
-  if (!supabase) return defaultReportsData[year] ?? null;
+  const pool = getOptionalPool();
+  if (!pool) return defaultReportsData[year] ?? null;
 
   try {
     const [reportRes, programsRes, speciesRes] = await Promise.all([
-      supabase.from('kehati_reports').select('*').eq('year', year).maybeSingle(),
-      supabase.from('kehati_programs').select('*').eq('year', year),
-      supabase.from('kehati_species').select('*').eq('year', year).order('sort_no', { ascending: true })
+      pool.query('SELECT * FROM public.kehati_reports WHERE year = $1 LIMIT 1', [year]),
+      pool.query('SELECT * FROM public.kehati_programs WHERE year = $1', [year]),
+      pool.query('SELECT * FROM public.kehati_species WHERE year = $1 ORDER BY sort_no ASC', [year]),
     ]);
 
-    if (reportRes.error || !reportRes.data) {
+    if (reportRes.rows.length === 0) {
       return defaultReportsData[year] ?? null;
     }
 
-    const row = reportRes.data;
+    const row = reportRes.rows[0];
 
-    // Build programs
-    const programs: ProgramSummary[] = (programsRes.data && programsRes.data.length > 0)
-      ? programsRes.data.map((p) => ({
-          id: p.id,
-          nameId: p.name_id,
-          nameEn: p.name_en,
-          descId: p.desc_id,
-          descEn: p.desc_en,
-          ring: p.ring,
-          landArea: p.land_area,
-          innovation: p.innovation,
-          unitId: p.unit_id,
-          unitEn: p.unit_en,
-          photoPlaceholder: p.photo_placeholder || '',
-          history: p.history || {}
-        }))
-      : defaultReportsData[year]?.programs || [];
+    const programs: ProgramSummary[] =
+      programsRes.rows.length > 0
+        ? programsRes.rows.map((p) => ({
+            id: p.id,
+            nameId: p.name_id,
+            nameEn: p.name_en,
+            descId: p.desc_id,
+            descEn: p.desc_en,
+            ring: p.ring,
+            landArea: p.land_area,
+            innovation: p.innovation,
+            unitId: p.unit_id,
+            unitEn: p.unit_en,
+            photoPlaceholder: p.photo_placeholder || '',
+            history: p.history || {},
+          }))
+        : defaultReportsData[year]?.programs || [];
 
-    // Build flora and fauna list
-    const speciesData = speciesRes.data || [];
+    const speciesData = speciesRes.rows;
     const floraList: SpeciesItem[] = speciesData
       .filter((s) => s.category === 'flora')
       .map((s) => ({
@@ -91,7 +78,7 @@ export async function getReportByYear(year: number): Promise<ReportYearData | nu
         iucn: s.iucn,
         isProtectedIndo: s.is_protected_indo,
         unit: s.unit,
-        history: s.history || {}
+        history: s.history || {},
       }));
 
     const faunaList: SpeciesItem[] = speciesData
@@ -103,7 +90,7 @@ export async function getReportByYear(year: number): Promise<ReportYearData | nu
         iucn: s.iucn,
         isProtectedIndo: s.is_protected_indo,
         unit: s.unit,
-        history: s.history || {}
+        history: s.history || {},
       }));
 
     return {
@@ -123,9 +110,9 @@ export async function getReportByYear(year: number): Promise<ReportYearData | nu
       overallHIndexFauna: row.overall_h_index_fauna ? Number(row.overall_h_index_fauna) : undefined,
       innovationHighlight: row.innovation_highlight,
       statusHistory: row.status_history || [],
-      programs: programs.length > 0 ? programs : (defaultReportsData[year]?.programs || []),
-      floraList: floraList.length > 0 ? floraList : (defaultReportsData[year]?.floraList || []),
-      faunaList: faunaList.length > 0 ? faunaList : (defaultReportsData[year]?.faunaList || []),
+      programs: programs.length > 0 ? programs : defaultReportsData[year]?.programs || [],
+      floraList: floraList.length > 0 ? floraList : defaultReportsData[year]?.floraList || [],
+      faunaList: faunaList.length > 0 ? faunaList : defaultReportsData[year]?.faunaList || [],
     };
   } catch (e) {
     console.warn(`Fallback to local report data for year ${year}:`, e);
@@ -150,18 +137,17 @@ export async function getAllReports(): Promise<Record<number, ReportYearData>> {
 }
 
 export async function getGalleryItems() {
-  const supabase = getSupabaseClient();
-  if (!supabase) return null;
+  const pool = getOptionalPool();
+  if (!pool) return null;
 
   try {
-    const { data, error } = await supabase
-      .from('kehati_gallery_items')
-      .select('*')
-      .order('sort_order', { ascending: true });
+    const { rows } = await pool.query(
+      'SELECT * FROM public.kehati_gallery_items ORDER BY sort_order ASC'
+    );
 
-    if (error || !data || data.length === 0) return null;
+    if (!rows || rows.length === 0) return null;
 
-    return data.map((item) => ({
+    return rows.map((item) => ({
       id: item.id,
       name: item.name,
       category: item.category,
